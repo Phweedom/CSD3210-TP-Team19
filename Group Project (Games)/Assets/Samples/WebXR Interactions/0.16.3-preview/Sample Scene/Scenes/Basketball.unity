@@ -608,6 +608,25 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1bb7642ebf8d0a34aa23fc586ea87e6a, type: 3}
+--- !u!1 &55856222 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7774344186399642229, guid: 1bb7642ebf8d0a34aa23fc586ea87e6a, type: 3}
+  m_PrefabInstance: {fileID: 55856221}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &55856223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 55856222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda0527855fd8f446b250992165d459c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftHand: {fileID: 1302711624}
+  rightHand: {fileID: 1302711623}
 --- !u!1 &68270958
 GameObject:
   m_ObjectHideFlags: 0
@@ -9113,6 +9132,20 @@ MonoBehaviour:
   rightControllerHapticProcess: {fileID: 0}
   rightControllerHapticProfiles: {fileID: 0}
   rightControllerDeviceDetails: {fileID: 0}
+--- !u!114 &1302711628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1302711623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf9af537f5d7aaa48873d3b1b744948e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 1302711619}
+  controllerVelocity: {x: 0, y: 0, z: 0}
 --- !u!1 &1346817253
 GameObject:
   m_ObjectHideFlags: 0
@@ -12276,6 +12309,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 580e3dd931df2bd42b042a7e8fde2aa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1765186337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1302711624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf9af537f5d7aaa48873d3b1b744948e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 1302711620}
+  controllerVelocity: {x: 0, y: 0, z: 0}
 --- !u!1 &1766869762
 GameObject:
   m_ObjectHideFlags: 0
