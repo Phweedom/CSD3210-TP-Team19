@@ -38,7 +38,7 @@ export class Basketball {
         sphere.position = position;
         sphere.scaling.setAll(0.3);
         sphere.physicsImpostor = new PhysicsImpostor(sphere, PhysicsImpostor.SphereImpostor, {
-            mass: 0,
+            mass: 1,
             friction: 1,
             restitution: 1,
             //disableBidirectionalTransformation: true

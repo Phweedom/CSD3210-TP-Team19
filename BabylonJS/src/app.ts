@@ -54,6 +54,10 @@ export class App {
     // define a new scene
     const scene = new Scene(this.engine);
 
+    // enable physics in this scene
+    scene.enablePhysics(new Vector3(0, -9.82, 0), new CannonJSPlugin(true, 10, CANNON));
+    //scene.enablePhysics(new Vector3(0, -9.82, 0), new AmmoJSPlugin());
+
     // building the environment //////////////////////////////////////////////////////////////////
     // create cameras and lights (either use default or create your own)
     scene.createDefaultCameraOrLight(false, true, true);
@@ -61,12 +65,9 @@ export class App {
     //Util.createCamera(scene, this.canvas);
     //Util.createLights(scene);
 
-    // enable physics in this scene
-    scene.enablePhysics(new Vector3(0, -9.82, 0), new CannonJSPlugin(true, 10, CANNON));
-    //scene.enablePhysics(new Vector3(0, -9.82, 0), new AmmoJSPlugin());
 
     // create ground
-    const ground = Util.createGround(100, 100, new Vector3(0, 0.65, 0), scene);
+    const ground = Util.createGround(50, 50, 0.5, new Vector3(0, 0.4, 0), scene);
 
     // build the game environment
     //Environment.buildGameEnvironment(scene);
