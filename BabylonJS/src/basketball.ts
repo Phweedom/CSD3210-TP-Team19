@@ -1,4 +1,4 @@
-import { Mesh, MeshBuilder, Observable, PhysicsImpostor, Scene, StandardMaterial, Tags, Vector3 } from "babylonjs";
+import { Mesh, MeshBuilder, Observable, PhysicsImpostor, Scene, StandardMaterial, Tags, Texture, Vector3 } from "babylonjs";
 import * as CANNON from "cannon-es";
 import { MyObservables } from "./myObservables";
 
@@ -35,6 +35,12 @@ export class Basketball {
 
     constructor(position: Vector3, scene: Scene) {
         const sphere = MeshBuilder.CreateSphere("basketball", { diameter: 1}, scene);
+
+        const material = new StandardMaterial ("basketball material", scene);
+        const texture = new Texture("assets/textures/basketball.png", this.scene);
+        material.diffuseTexture = texture;
+        sphere.material = material;        
+
         sphere.position = position;
         sphere.scaling.setAll(0.3);
         sphere.physicsImpostor = new PhysicsImpostor(sphere, PhysicsImpostor.SphereImpostor, {
