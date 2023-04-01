@@ -4,6 +4,7 @@ import {
   MeshBuilder,
   PhysicsImpostor,
   Scene,
+  StandardMaterial,
   Tags,
   Vector3,
   WebXRControllerPhysics,
@@ -35,6 +36,7 @@ export class Controller {
       segments: 16,
       diameter: 0.3,
     });
+    sphere.material = new StandardMaterial("basketball material", scene);
     Tags.AddTagsTo(sphere, "basketball")
 
     //whenever controller is available, run the callback function

@@ -1,8 +1,16 @@
-import { Color3, Mesh, Observable, Scene, StandardMaterial, Vector3 } from "babylonjs";
+import {
+  Color3,
+  Mesh,
+  Observable,
+  Scene,
+  StandardMaterial,
+  Vector3,
+} from "babylonjs";
 import { Atom, Compound, Element } from "./components/meshes";
 import { Basketball } from "./basketball";
-import {ScoreDetector} from "./scoreDetector"
+import { ScoreDetector } from "./scoreDetector";
 import * as CANNON from "cannon-es";
+import { TextBlock } from "babylonjs-gui";
 
 /**
  * MyObservables contains functions that can add various observables to virtual objects.
@@ -106,25 +114,69 @@ export class MyObservables {
     });
   }
 
-
-  static addBasketballScoreObservable(scoreDetector: ScoreDetector, scene: Scene) {
-    const onIntersectObservable = new Observable<boolean>();
+  static addBasketballScoreObservable(
+    scoreDetector: ScoreDetector,
+    score: number,
+    scoreTextblock: TextBlock,
+    scene: Scene
+  ) {
+    const onIntersectObservable = new Observable<[boolean, Mesh]>();
 
     // register a function to run before each frame of the scene is rendered. This function
     // checks whether sphere is intersecting with helloSphere, and notifies onIntersectObservable
     // with the result (true or false).
     scene.registerBeforeRender(function () {
+      const basketballs = scene.getMeshesByTags("basketball");
       
-      const basketballs = scene.getMeshesByTags("basketball")
+      var i = 0;
+      while (i < basketballs.length) {
+        if (basketballs[i].position.equals(Vector3.Zero())) {
+          //why they don't have not equal function
+        } else {
+          const spheresIntersecting = scoreDetector.mesh.intersectsMesh(
+            basketballs[i],
+            true,
+            true
+          );
 
-      basketballs.forEach(function(basketball){
-        const spheresIntersecting = scoreDetector.mesh.intersectsMesh(
-          basketball,
-          true,
-          true
-        );
-        onIntersectObservable.notifyObservers(spheresIntersecting);
-      })
+          if (spheresIntersecting) {
+            score += 1;
+            console.log(
+              "basketball and detector have intersected, basketball position is: " +
+              basketballs[i].position
+            );
+            onIntersectObservable.notifyObservers([
+              spheresIntersecting,
+              basketballs[i],
+            ]);
+          }
+        }
+        i += 1;
+      }
+
+
+      // basketballs.forEach(function (basketball) {
+      //   if (basketball.position.equals(Vector3.Zero())) {
+      //     //why they don't have not equal function
+      //   } else {
+      //     const spheresIntersecting = scoreDetector.mesh.intersectsMesh(
+      //       basketball,
+      //       true,
+      //       true
+      //     );
+
+      //     if (spheresIntersecting) {
+      //       console.log(
+      //         "basketball and detector have intersected, basketball position is: " +
+      //           basketball.position
+      //       );
+      //       onIntersectObservable.notifyObservers([
+      //         spheresIntersecting,
+      //         basketball,
+      //       ]);
+      //     }
+      //   }
+      // });
     });
 
     // assign onIntersectObservable as the onIntersectObservable property of helloSphere.
@@ -141,22 +193,16 @@ export class MyObservables {
     // function below will be called with the boolean value indicating whether the two spheres
     // are intersecting.
     scoreDetector.onIntersectObservable.add((isIntersecting) => {
-      const material = scoreDetector.mesh.material as StandardMaterial;
-      if (isIntersecting) {
+      const material = isIntersecting[1].material as StandardMaterial;
+      if (isIntersecting[0]) {
         material.diffuseColor = blueColor;
-      } 
+        //scene.getMeshByName("score counter").metadata.score += 1;
+        //scene.
+        score += 1;
+        scoreTextblock.text = score.toString(); 
+      }
     });
   }
-
-
-
-
-
-
-
-
-
-
 
   static addOnPositionChangeObservable(ball: Basketball, scene: Scene) {
     const onPositionhangeObservable = new Observable<[Vector3]>();
@@ -168,33 +214,26 @@ export class MyObservables {
 
       // for each basketball, check if current rigidbody position is same as previous
       balls.forEach(function (ball) {
-        
         const previousRBPosition = ball.metadata.object.previousPosition;
         const currentRBPosition = ball.metadata.object.rididbody.position;
 
         if (previousRBPosition != currentRBPosition) {
-
           console.log(currentRBPosition);
 
-            //notify observers
-            onPositionhangeObservable.notifyObservers([
-              currentRBPosition
-          ])
-
-        
+          //notify observers
+          onPositionhangeObservable.notifyObservers([currentRBPosition]);
         }
-
       });
     });
 
     ball.onPositionhangeObservable = onPositionhangeObservable;
 
     ball.onPositionhangeObservable.add((newPosition) => {
-        ball.previousPosition = newPosition[0];
+      ball.previousPosition = newPosition[0];
 
-        ball.mesh.position.x = newPosition[0].x;
-        ball.mesh.position.y = newPosition[0].y;
-        ball.mesh.position.z = newPosition[0].z;
-    })
+      ball.mesh.position.x = newPosition[0].x;
+      ball.mesh.position.y = newPosition[0].y;
+      ball.mesh.position.z = newPosition[0].z;
+    });
   }
 }

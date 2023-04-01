@@ -1,4 +1,4 @@
-import { ActionManager, AmmoJSPlugin, CannonJSPlugin, Engine, MeshBuilder, PhysicsImpostor, Scene, Sound, Vector3, WebXRFeatureName } from "babylonjs";
+import { ActionManager, AmmoJSPlugin, CannonJSPlugin, Engine, MeshBuilder, PhysicsImpostor, Scene, Sound, StandardMaterial, Tags, Vector3, WebXRFeatureName } from "babylonjs";
 import "babylonjs-loaders";
 import { Util } from "./util";
 import { MovementMode, Locomotion } from "./locomotion";
@@ -69,10 +69,18 @@ export class App {
     const ground = Util.createGround(100, 100, new Vector3(0, 0.65, 0), scene);
 
     // build the game environment
-    Environment.buildGameEnvironment(scene);
+    //Environment.buildGameEnvironment(scene);
+    const environment = new Environment(scene);
 
     // temporary ball
-    const ball = new Basketball(new Vector3(0, 1, 1.5), scene);
+    // const ball = new Basketball(new Vector3(0, 1, 1.5), scene);
+    var sphere = MeshBuilder.CreateSphere("sphere1", {
+      segments: 16,
+      diameter: 0.3,
+    });
+    sphere.position = new Vector3(2, 2, 2);
+    sphere.material = new StandardMaterial("basketball material", scene);
+    //Tags.AddTagsTo(sphere, "basketball")
     //////////////////////////////////////////////////////////////////////////////////////////////
 
 
