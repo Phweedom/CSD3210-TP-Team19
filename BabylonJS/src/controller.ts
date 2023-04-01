@@ -37,6 +37,8 @@ export class Controller {
       diameter: 0.3,
     });
     sphere.material = new StandardMaterial("basketball material", scene);
+    sphere.metadata = {};
+    sphere.metadata.value = false;
     Tags.AddTagsTo(sphere, "basketball")
 
     //whenever controller is available, run the callback function
@@ -83,7 +85,15 @@ export class Controller {
           squeezeButton.onButtonStateChangedObservable.add(() => {
             if (squeezeButton.changes.pressed) {
               if (squeezeButton.pressed) {
-                const newBall = sphere.clone();
+                const newBall = MeshBuilder.CreateSphere("sphere1", {
+                  segments: 16,
+                  diameter: 0.3,
+                });
+                newBall.material = new StandardMaterial("basketball material", scene);
+                newBall.metadata = {};
+                newBall.metadata.value = false;
+                Tags.AddTagsTo(newBall, "basketball")
+
                 newBall.isVisible = true;
                 newBall.setParent(controller.grip);
                 newBall.position = new Vector3(0, 0, -0.1);

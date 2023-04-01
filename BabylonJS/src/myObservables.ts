@@ -130,7 +130,7 @@ export class MyObservables {
       
       var i = 0;
       while (i < basketballs.length) {
-        if (basketballs[i].position.equals(Vector3.Zero())) {
+        if (basketballs[i].position.equals(Vector3.Zero()) ||basketballs[i].metadata.value == true) {
           //why they don't have not equal function
         } else {
           const spheresIntersecting = scoreDetector.mesh.intersectsMesh(
@@ -140,7 +140,8 @@ export class MyObservables {
           );
 
           if (spheresIntersecting) {
-            score += 1;
+            basketballs[i].metadata.value = true;
+            //score += 1;
             console.log(
               "basketball and detector have intersected, basketball position is: " +
               basketballs[i].position

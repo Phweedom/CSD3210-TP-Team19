@@ -130,8 +130,8 @@ export class App {
     
     // locomotion
     const featureManager = xr.baseExperience.featuresManager;
-    //const movement = MovementMode.Teleportation;
-    const movement = MovementMode.Controller;
+    const movement = MovementMode.Teleportation;
+    //const movement = MovementMode.Controller;
     Locomotion.initLocomotion(movement, xr, featureManager, ground, scene);
 
     
