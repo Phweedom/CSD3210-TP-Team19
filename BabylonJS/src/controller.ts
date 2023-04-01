@@ -34,6 +34,7 @@ export class Controller {
       segments: 16,
       diameter: 0.3,
     });
+    sphere.metadata = { scored: false }
 
     //whenever controller is available, run the callback function
     xr.input.onControllerAddedObservable.add((controller) => {
@@ -99,7 +100,7 @@ export class Controller {
                   );
 
                   const w = angularVelocity;
-                  const v = linearVelocity.scale(8);
+                  const v = linearVelocity.scale(7);
 
                   const r = new Vector3(0, 0, -0.1);
                   r.rotateByQuaternionToRef(

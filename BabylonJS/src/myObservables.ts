@@ -106,6 +106,45 @@ export class MyObservables {
   }
 
 
+  // static addBasketballScoreObservable(mesh: Mesh, targetName: string, scene: Scene) {
+  //   const onIntersectObservable = new Observable<boolean>();
+
+  //   // register a function to run before each frame of the scene is rendered. This function
+  //   // checks whether sphere is intersecting with helloSphere, and notifies onIntersectObservable
+  //   // with the result (true or false).
+  //   scene.registerBeforeRender(function () {
+  //     const spheresIntersecting = mesh.intersectsMesh(
+  //       scene.getMeshByName(targetName),
+  //       true,
+  //       true
+  //     );
+  //     onIntersectObservable.notifyObservers(spheresIntersecting);
+  //   });
+
+  //   // assign onIntersectObservable as the onIntersectObservable property of helloSphere.
+  //   // whenever onIntersectObservable emits an event, helloSphere will receive it.
+  //   mesh.onIntersectObservable = onIntersectObservable;
+
+  //   // storing red and white colors in variables
+  //   const redColor = Color3.Red();
+  //   const whiteColor = Color3.White();
+
+  //   // add a listener to the helloSphere.onIntersectObservable. Whenever onIntersectObservable
+  //   // emits an event (aka when the two spheres intersect or stop intersecting), the callback
+  //   // function below will be called with the boolean value indicating whether the two spheres
+  //   // are intersecting.
+  //   helloSphere.onIntersectObservable.add((isIntersecting) => {
+  //     const material = helloSphere.mesh.material as StandardMaterial;
+  //     const isRed = material.diffuseColor === redColor;
+  //     if (isIntersecting && !isRed) {
+  //       material.diffuseColor = redColor;
+  //     } else if (!isIntersecting && isRed) {
+  //       material.diffuseColor = whiteColor;
+  //     }
+  //   });
+  // }
+
+
 
 
 

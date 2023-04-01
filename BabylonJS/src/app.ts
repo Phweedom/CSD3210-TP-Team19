@@ -57,7 +57,7 @@ export class App {
     // building the environment //////////////////////////////////////////////////////////////////
     // create cameras and lights (either use default or create your own)
     scene.createDefaultCameraOrLight(false, true, true);
-    scene.activeCamera.position = new Vector3(0, 1.5, 0);
+    scene.activeCamera.position = new Vector3(0, 20, 0);
     //Util.createCamera(scene, this.canvas);
     //Util.createLights(scene);
 
@@ -68,11 +68,8 @@ export class App {
     // create ground
     const ground = Util.createGround(100, 100, new Vector3(0, 0.65, 0), scene);
 
-    // build the basketball environment
-    Environment.buildBasketballCourt(scene);
-
-    // build bowling alley (TODO)
-
+    // build the game environment
+    Environment.buildGameEnvironment(scene);
 
     // temporary ball
     const ball = new Basketball(new Vector3(0, 1, 1.5), scene);
@@ -117,7 +114,7 @@ export class App {
     // snap xr camera to desired height (so that camera doesn't go down to ground level after teleportation)
     xr.baseExperience.sessionManager.onXRFrameObservable.add(() => {
       //xr.baseExperience.camera.position.y = 20;
-      xr.baseExperience.camera.position.y = 1.5;
+      //xr.baseExperience.camera.position.y = 2;
     });
 
 

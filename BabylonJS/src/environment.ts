@@ -22,8 +22,12 @@ import { Element } from "./components/meshes";
  * @author Lim Min Ye
  */
 export class Environment {
+  static buildGameEnvironment(scene: Scene) {
+    Environment.buildBasketballCourt(new Vector3(0, 0, 0), 3, scene);
+    Environment.buildBowling(new Vector3(10, 0, 0), 1, scene);
+  }
 
-  static buildBasketballCourt(scene: Scene) {
+  static buildBasketballCourt(position: Vector3, scale: number, scene: Scene) {
     // create a skybox
     Util.createSkybox(scene);
 
@@ -31,29 +35,79 @@ export class Environment {
     Util.loadModel(
       "assets/models/",
       "basketball_court.glb",
-      new Vector3(0, 0, 0),
-      3,
+      position,
+      scale,
       scene
     );
 
-    // create physics backboard
-    const backboard = MeshBuilder.CreateBox("backboard", {
-      size: 0.03,
-      width: 1.5, 
-      height: 1.0, 
-    }, scene);
-    backboard.position = new Vector3(0, 3.3, 6.03);
-    // add physics to it
-    backboard.physicsImpostor = new PhysicsImpostor(backboard, PhysicsImpostor.BoxImpostor, {
-      mass: 0,
-      friction: 1,
-      restitution: 1
-    });
+    // add backboards
+    Environment.buildBackboard(new Vector3(0, 3.3, 6.03), scale, scene);
+    Environment.buildBackboard(new Vector3(0, 3.3, -6.03), scale, scene);
+
+    // create rim mesh
+    Environment.buildRim(new Vector3(0, 3, 5.7), scale, scene);
+    Environment.buildRim(new Vector3(0, 3, -5.7), scale, scene);
+
+    Environment.buildRim(new Vector3(1, 1, 1), scale, scene);
+  }
+
+  static buildRim(position: Vector3, scale: number, scene: Scene) {
+    // create rim mesh
+    const rim = MeshBuilder.CreateTorus(
+      "rim",
+      { diameter: 0.25, thickness: 0.02 },
+      scene
+    );
+    rim.position = position;
+    rim.scaling.setAll(scale);
+
+    // add collider to rim
+    rim.physicsImpostor = new PhysicsImpostor(
+      rim,
+      PhysicsImpostor.MeshImpostor,
+      {
+        mass: 0,
+        friction: 1,
+        restitution: 1,
+      }
+    );
+    // make it transparent
+    const rimMaterial = new StandardMaterial("rim material", scene);
+    rimMaterial.alpha = 1.0;
+    rim.material = rimMaterial;
+  }
+
+  static buildBackboard(position: Vector3, scale: number, scene: Scene) {
+    // create backboard mesh
+    const backboard = MeshBuilder.CreateBox(
+      "backboard",
+      {
+        size: 0.01,
+        width: 0.5,
+        height: 0.33,
+      },
+      scene
+    );
+    backboard.position = position;
+    backboard.scaling.setAll(scale);
+    // add collider to backboard
+    backboard.physicsImpostor = new PhysicsImpostor(
+      backboard,
+      PhysicsImpostor.BoxImpostor,
+      {
+        mass: 0,
+        friction: 1,
+        restitution: 1,
+      }
+    );
     // make it transparent
     const backboardMaterial = new StandardMaterial("backboard material", scene);
     backboardMaterial.alpha = 1.0;
     backboard.material = backboardMaterial;
+  }
 
+  static buildBowling(position: Vector3, scale: number, scene: Scene) {
+    //TODO
   }
 
   static buildClassroom(scene: Scene) {
