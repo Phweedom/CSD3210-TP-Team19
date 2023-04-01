@@ -35,7 +35,7 @@ export class Environment {
     this.basketballScore = 0;
     
     this.buildBasketballCourt(new Vector3(0, 0, 0), 3, scene);
-    this.buildBowling(new Vector3(0, 0, 0), 1, scene);
+    this.buildBowling(new Vector3(7.815, 0.65, 4.5), 30, scene);
   }
   
   buildBasketballCourt(position: Vector3, scale: number, scene: Scene) {
@@ -154,6 +154,14 @@ export class Environment {
 
   buildBowling(position: Vector3, scale: number, scene: Scene) {
     
+    Util.loadModel(
+      "assets/models/",
+      "bowlingMachine.glb",
+      position,
+      scale,
+      scene
+    );
+
     var i = 0;
     while (i < 4) {
       new BowlingPin(new Vector3(-1 + (i * 0.3), 0.9, 5), 0.3, scene);
