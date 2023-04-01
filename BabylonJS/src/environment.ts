@@ -14,6 +14,7 @@ import { TextPlane, Atom } from "./components/meshes";
 import { Util } from "./util";
 import { Spawner } from "./spawner";
 import { Element } from "./components/meshes";
+import {ScoreDetector} from "./scoreDetector"
 
 /**
  * Environment contains functions that are used for building a classroom environment.
@@ -49,6 +50,8 @@ export class Environment {
     Environment.buildRim(new Vector3(0, 3, -5.7), scale, scene);
 
     Environment.buildRim(new Vector3(1, 1, 1), scale, scene);
+    
+
   }
 
   static buildRim(position: Vector3, scale: number, scene: Scene) {
@@ -75,6 +78,10 @@ export class Environment {
     const rimMaterial = new StandardMaterial("rim material", scene);
     rimMaterial.alpha = 1.0;
     rim.material = rimMaterial;
+
+    
+    const scoreDetectorOffset = new Vector3(0, -0.2, 0);
+    const scoreDetector = new ScoreDetector("basketball score detector", rim.position.add(scoreDetectorOffset), 1, scene);
   }
 
   static buildBackboard(position: Vector3, scale: number, scene: Scene) {

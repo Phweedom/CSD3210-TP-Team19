@@ -1,6 +1,7 @@
-import { Mesh, Observable, Scene, Vector3 } from "babylonjs";
+import { Color3, Mesh, Observable, Scene, StandardMaterial, Vector3 } from "babylonjs";
 import { Atom, Compound, Element } from "./components/meshes";
 import { Basketball } from "./basketball";
+import {ScoreDetector} from "./scoreDetector"
 import * as CANNON from "cannon-es";
 
 /**
@@ -106,43 +107,46 @@ export class MyObservables {
   }
 
 
-  // static addBasketballScoreObservable(mesh: Mesh, targetName: string, scene: Scene) {
-  //   const onIntersectObservable = new Observable<boolean>();
+  static addBasketballScoreObservable(scoreDetector: ScoreDetector, scene: Scene) {
+    const onIntersectObservable = new Observable<boolean>();
 
-  //   // register a function to run before each frame of the scene is rendered. This function
-  //   // checks whether sphere is intersecting with helloSphere, and notifies onIntersectObservable
-  //   // with the result (true or false).
-  //   scene.registerBeforeRender(function () {
-  //     const spheresIntersecting = mesh.intersectsMesh(
-  //       scene.getMeshByName(targetName),
-  //       true,
-  //       true
-  //     );
-  //     onIntersectObservable.notifyObservers(spheresIntersecting);
-  //   });
+    // register a function to run before each frame of the scene is rendered. This function
+    // checks whether sphere is intersecting with helloSphere, and notifies onIntersectObservable
+    // with the result (true or false).
+    scene.registerBeforeRender(function () {
+      
+      const basketballs = scene.getMeshesByTags("basketball")
 
-  //   // assign onIntersectObservable as the onIntersectObservable property of helloSphere.
-  //   // whenever onIntersectObservable emits an event, helloSphere will receive it.
-  //   mesh.onIntersectObservable = onIntersectObservable;
+      basketballs.forEach(function(basketball){
+        const spheresIntersecting = scoreDetector.mesh.intersectsMesh(
+          basketball,
+          true,
+          true
+        );
+        onIntersectObservable.notifyObservers(spheresIntersecting);
+      })
+    });
 
-  //   // storing red and white colors in variables
-  //   const redColor = Color3.Red();
-  //   const whiteColor = Color3.White();
+    // assign onIntersectObservable as the onIntersectObservable property of helloSphere.
+    // whenever onIntersectObservable emits an event, helloSphere will receive it.
+    scoreDetector.onIntersectObservable = onIntersectObservable;
 
-  //   // add a listener to the helloSphere.onIntersectObservable. Whenever onIntersectObservable
-  //   // emits an event (aka when the two spheres intersect or stop intersecting), the callback
-  //   // function below will be called with the boolean value indicating whether the two spheres
-  //   // are intersecting.
-  //   helloSphere.onIntersectObservable.add((isIntersecting) => {
-  //     const material = helloSphere.mesh.material as StandardMaterial;
-  //     const isRed = material.diffuseColor === redColor;
-  //     if (isIntersecting && !isRed) {
-  //       material.diffuseColor = redColor;
-  //     } else if (!isIntersecting && isRed) {
-  //       material.diffuseColor = whiteColor;
-  //     }
-  //   });
-  // }
+    // storing red and white colors in variables
+    const redColor = Color3.Red();
+    const whiteColor = Color3.White();
+    const blueColor = Color3.Blue();
+
+    // add a listener to the helloSphere.onIntersectObservable. Whenever onIntersectObservable
+    // emits an event (aka when the two spheres intersect or stop intersecting), the callback
+    // function below will be called with the boolean value indicating whether the two spheres
+    // are intersecting.
+    scoreDetector.onIntersectObservable.add((isIntersecting) => {
+      const material = scoreDetector.mesh.material as StandardMaterial;
+      if (isIntersecting) {
+        material.diffuseColor = blueColor;
+      } 
+    });
+  }
 
 
 

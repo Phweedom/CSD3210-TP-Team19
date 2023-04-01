@@ -4,6 +4,7 @@ import {
   MeshBuilder,
   PhysicsImpostor,
   Scene,
+  Tags,
   Vector3,
   WebXRControllerPhysics,
   WebXRDefaultExperience,
@@ -34,7 +35,7 @@ export class Controller {
       segments: 16,
       diameter: 0.3,
     });
-    sphere.metadata = { scored: false }
+    Tags.AddTagsTo(sphere, "basketball")
 
     //whenever controller is available, run the callback function
     xr.input.onControllerAddedObservable.add((controller) => {
