@@ -78,7 +78,7 @@ export class App {
       segments: 16,
       diameter: 0.3,
     });
-    sphere.position = new Vector3(2, 2, 2);
+    sphere.position = new Vector3(0, 8, 5.8);
     sphere.material = new StandardMaterial("basketball material", scene);
     const texture = new Texture("assets/textures/basketball.png", scene);
     const basketballMaterial = sphere.material as StandardMaterial;
