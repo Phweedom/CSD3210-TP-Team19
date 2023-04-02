@@ -1,13 +1,21 @@
 import {
   ActionManager,
+  Color3,
   ExecuteCodeAction,
   Mesh,
   MeshBuilder,
+  PhysicsImpostor,
   Scene,
   StandardMaterial,
+  Tags,
+  Texture,
   Vector3,
 } from "babylonjs";
-import { Atom, Element } from "./components/meshes";
+
+export enum BALLTYPE {
+  BASKETBALL,
+  BOWLINGBALL,
+}
 
 /**
  * Spawner is an object that spawns new atoms whenever it is clicked on.
@@ -17,43 +25,34 @@ import { Atom, Element } from "./components/meshes";
  */
 export class Spawner {
   scene: Scene;
-  element: Element;
+  ballType: BALLTYPE;
   mesh: Mesh;
   name: string;
 
   /**
    * Constructs a new spawner.
    *
-   * @param element is the element of the atom that spawns.
    * @param position is the location of this spawner.
    * @param scene is the scene where this spawner will be in.
    */
-  constructor(element: Element, position: Vector3, scene: Scene) {
+  constructor(ballType: BALLTYPE, position: Vector3, scene: Scene) {
     this.scene = scene;
 
     // assigning the name based on input element
-    switch (element) {
-      case Element.Oxygen:
-        this.name = "oxygen";
+    switch (ballType) {
+      case BALLTYPE.BASKETBALL:
+        this.name = "basketball";
         break;
 
-      case Element.Carbon:
-        this.name = "carbon";
-        break;
-
-      case Element.Sodium:
-        this.name = "sodium";
-        break;
-
-      case Element.Chlorine:
-        this.name = "chlorine";
+      case BALLTYPE.BOWLINGBALL:
+        this.name = "bowlingball";
         break;
     }
 
     // create a cubic mesh that will be used for detecting clicks
     this.mesh = MeshBuilder.CreateBox(
       this.name,
-      { size: 3.75, width: 3.75, height: 0.25 },
+      { size: 1, width: 1, height: 0.25 },
       scene
     );
     this.mesh.material = new StandardMaterial(
@@ -61,11 +60,11 @@ export class Spawner {
       scene
     );
     const spawnerMaterial = this.mesh.material as StandardMaterial;
-    spawnerMaterial.alpha = 0;
-    //spawnerMaterial.diffuseColor = Color3.Black(); //for easy debugging
+    spawnerMaterial.alpha = 1.0;
+    spawnerMaterial.diffuseColor = Color3.Green();
     this.mesh.position = position;
 
-    this.initActions(element);
+    this.initActions(ballType);
   }
 
   /**
@@ -74,7 +73,7 @@ export class Spawner {
    *
    * @param element to spawn
    */
-  private initActions(element: Element) {
+  private initActions(ballType: BALLTYPE) {
     const actionManager = (this.mesh.actionManager = new ActionManager(
       this.scene
     ));
@@ -86,12 +85,33 @@ export class Spawner {
           trigger: ActionManager.OnPickDownTrigger,
         },
         () => {
-          const newAtom = new Atom(
-            this.name,
-            { diameter: 0.5 },
-            this.mesh.position.add(Vector3.Up()),
-            this.scene
-          );
+          if (ballType == BALLTYPE.BASKETBALL) {
+            var sphere = MeshBuilder.CreateSphere(this.name, {
+              segments: 16,
+              diameter: 0.3,
+            });
+            sphere.position = this.mesh.position.add(Vector3.Up());
+            sphere.material = new StandardMaterial(
+              "basketball material",
+              this.scene
+            );
+            const texture = new Texture("assets/textures/basketball.png", this.scene);
+    const basketballMaterial = sphere.material as StandardMaterial;
+    basketballMaterial.diffuseTexture = texture;
+    sphere.material = basketballMaterial;  
+
+            sphere.metadata = {};
+            sphere.metadata.value = false;
+            Tags.AddTagsTo(sphere, "basketball");
+
+            sphere.physicsImpostor = new PhysicsImpostor(
+              sphere,
+              PhysicsImpostor.SphereImpostor,
+              {
+                mass: 0.5,
+              }
+            );
+          }
         }
       )
     );

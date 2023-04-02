@@ -10,6 +10,7 @@ import {
   GizmoManager,
   GroundMesh,
   HemisphericLight,
+  Mesh,
   MeshBuilder,
   ParticleSystem,
   PhysicsImpostor,
@@ -86,7 +87,7 @@ export class Util {
     scaleFactor: number,
     scene: Scene
   ) {
-    // importing a mesh into the scene.
+    //importing a mesh into the scene.
     SceneLoader.ImportMeshAsync("", filepath, modelname, scene).then(
       (result) => {
         const root = result.meshes[0];
@@ -94,9 +95,19 @@ export class Util {
         root.name = modelname;
         root.position = position;
         root.rotate(Vector3.Up(), Math.PI/2);
-        root.scaling.setAll(scaleFactor);
+        root.scaling.scaleInPlace(scaleFactor);
       }
     );
+    // SceneLoader.ImportMesh("", filepath, modelname, scene, function (result) {
+    //     const root = result[0];
+    //     root.id = modelname;
+    //     root.name = modelname;
+    //     root.position = position;
+    //     root.rotate(Vector3.Up(), Math.PI/2);
+    //     root.scaling.setAll(scaleFactor);
+    // });
+
+
   }
 
   /**
@@ -276,31 +287,32 @@ export class Util {
   }
 
   static createGround(
+    size: number,
     width: number,
     height: number,
     position: Vector3,
     scene: Scene
-  ): GroundMesh {
+  )/*: GroundMesh*/ : Mesh{
     const groundMaterial = new StandardMaterial("ground material", scene);
     groundMaterial.alpha = 0.0;
 
-    const ground = MeshBuilder.CreateGround(
+    const ground = MeshBuilder.CreateBox(
       "ground",
-      { width: width, height: height },
+      { size: size, width: width, height: height },
       scene
     );
 
     ground.material = groundMaterial;
     ground.position = position;
 
-    scene.enablePhysics(new Vector3(0, -9.82, 0), new CannonJSPlugin(true, 10, CANNON));
+    //scene.enablePhysics(new Vector3(0, -9.82, 0), new CannonJSPlugin(true, 10, CANNON));
 
     ground.physicsImpostor = new PhysicsImpostor(
       ground,
       PhysicsImpostor.BoxImpostor, {
         mass: 0,
         friction: 1,
-        restitution: 0.5
+        restitution: 0
       }
     )
 

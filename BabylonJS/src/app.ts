@@ -1,4 +1,4 @@
-import { ActionManager, AmmoJSPlugin, CannonJSPlugin, Engine, MeshBuilder, PhysicsImpostor, Scene, Sound, Vector3, WebXRFeatureName } from "babylonjs";
+import { ActionManager, AmmoJSPlugin, CannonJSPlugin, Engine, MeshBuilder, PhysicsImpostor, Scene, Sound, StandardMaterial, Tags, Texture, Vector3, WebXRFeatureName } from "babylonjs";
 import "babylonjs-loaders";
 import { Util } from "./util";
 import { MovementMode, Locomotion } from "./locomotion";
@@ -54,28 +54,49 @@ export class App {
     // define a new scene
     const scene = new Scene(this.engine);
 
-    // building the environment //////////////////////////////////////////////////////////////////
-    // create cameras and lights (either use default or create your own)
-    scene.createDefaultCameraOrLight(false, true, true);
-    scene.activeCamera.position = new Vector3(0, 1.5, 0);
-    //Util.createCamera(scene, this.canvas);
-    //Util.createLights(scene);
-
     // enable physics in this scene
     scene.enablePhysics(new Vector3(0, -9.82, 0), new CannonJSPlugin(true, 10, CANNON));
     //scene.enablePhysics(new Vector3(0, -9.82, 0), new AmmoJSPlugin());
 
+    // building the environment //////////////////////////////////////////////////////////////////
+    // create cameras and lights (either use default or create your own)
+    scene.createDefaultCameraOrLight(false, true, true);
+    scene.activeCamera.position = new Vector3(0, 3, 0);
+    //Util.createCamera(scene, this.canvas);
+    //Util.createLights(scene);
+
+
     // create ground
-    const ground = Util.createGround(100, 100, new Vector3(0, 0.65, 0), scene);
+    const ground = Util.createGround(50, 50, 0.5, new Vector3(0, 0.4, 0), scene);
 
-    // build the basketball environment
-    Environment.buildBasketballCourt(scene);
-
-    // build bowling alley (TODO)
-
+    // build the game environment
+    //Environment.buildGameEnvironment(scene);
+    const environment = new Environment(scene);
 
     // temporary ball
-    const ball = new Basketball(new Vector3(0, 1, 1.5), scene);
+    var sphere = MeshBuilder.CreateSphere("basketball", {
+      segments: 16,
+      diameter: 0.3,
+    });
+    sphere.position = new Vector3(0, 8, 5.8);
+    sphere.material = new StandardMaterial("basketball material", scene);
+    const texture = new Texture("assets/textures/basketball.png", scene);
+    const basketballMaterial = sphere.material as StandardMaterial;
+    basketballMaterial.diffuseTexture = texture;
+    sphere.material = basketballMaterial;  
+
+    sphere.metadata = {};
+    sphere.metadata.value = false;
+    Tags.AddTagsTo(sphere, "basketball")
+
+    sphere.physicsImpostor = new PhysicsImpostor(
+      sphere,
+      PhysicsImpostor.SphereImpostor,
+      {
+        mass: 0.5,
+      }
+    );
+
     //////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -117,7 +138,7 @@ export class App {
     // snap xr camera to desired height (so that camera doesn't go down to ground level after teleportation)
     xr.baseExperience.sessionManager.onXRFrameObservable.add(() => {
       //xr.baseExperience.camera.position.y = 20;
-      xr.baseExperience.camera.position.y = 1.5;
+      //xr.baseExperience.camera.position.y = 2;
     });
 
 
@@ -125,8 +146,8 @@ export class App {
     
     // locomotion
     const featureManager = xr.baseExperience.featuresManager;
-    //const movement = MovementMode.Teleportation;
-    const movement = MovementMode.Controller;
+    const movement = MovementMode.Teleportation;
+    //const movement = MovementMode.Controller;
     Locomotion.initLocomotion(movement, xr, featureManager, ground, scene);
 
     
