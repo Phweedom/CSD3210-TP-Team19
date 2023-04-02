@@ -96,6 +96,12 @@ export class Util {
         root.position = position;
         root.rotate(Vector3.Up(), Math.PI/2);
         root.scaling.scaleInPlace(scaleFactor);
+
+        result.meshes.forEach(mesh => {
+          if (mesh.material) {
+              mesh.material.backFaceCulling = true;
+          }
+      });
       }
     );
     // SceneLoader.ImportMesh("", filepath, modelname, scene, function (result) {
