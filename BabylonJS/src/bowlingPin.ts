@@ -5,7 +5,9 @@ import {
   PhysicsImpostor,
   Scene,
   SceneLoader,
+  StandardMaterial,
   Tags,
+  Texture,
   Vector3,
 } from "babylonjs";
 import { TextBlock } from "babylonjs-gui";
@@ -52,11 +54,20 @@ export class BowlingPin {
     //     }
     //   );
 
+    const faceUV = [];
+    faceUV[0] =	new BABYLON.Vector4(0, 0, 0, 0);
+    faceUV[1] =	new BABYLON.Vector4(1, 0, 0.25, 1); // x, z swapped to flip image
+    faceUV[2] = new BABYLON.Vector4(0, 0, 0.24, 1);
+
     this.mesh = MeshBuilder.CreateCylinder(
       "bowling pin",
-      { diameter: 0.45, height: 1.25 },
+      { diameter: 0.45, height: 1.25, faceUV: faceUV },
       scene
     );
+    const pinMaterial = new StandardMaterial("material", scene);
+	  pinMaterial.diffuseTexture = new Texture("assets/textures/bowling_can.jpg", scene);
+    this.mesh.material = pinMaterial;
+	
     this.mesh.position = position;
     this.mesh.scaling.setAll(scaleFactor);
     this.mesh.physicsImpostor = new PhysicsImpostor(

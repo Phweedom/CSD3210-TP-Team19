@@ -300,7 +300,10 @@ export class Util {
     scene: Scene
   )/*: GroundMesh*/ : Mesh{
     const groundMaterial = new StandardMaterial("ground material", scene);
-    groundMaterial.alpha = 0.0;
+    groundMaterial.alpha = 1.0;
+    groundMaterial.backFaceCulling = true;
+    groundMaterial.diffuseTexture = new Texture("assets/textures/grass.png", scene);
+    groundMaterial.diffuseColor = new Color3(0.35, 0.5, 0.25);
 
     const ground = MeshBuilder.CreateBox(
       "ground",
