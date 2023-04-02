@@ -3,6 +3,7 @@ import {
   Mesh,
   Observable,
   Scene,
+  Sound,
   StandardMaterial,
   Vector3,
 } from "babylonjs";
@@ -122,7 +123,7 @@ export class MyObservables {
     scene: Scene
   ) {
     const onIntersectObservable = new Observable<[boolean, Mesh]>();
-
+    const scoreSound = new Sound('scoreSound', 'assets/sounds/score.mp3', scene, null);
     // register a function to run before each frame of the scene is rendered. This function
     // checks whether sphere is intersecting with helloSphere, and notifies onIntersectObservable
     // with the result (true or false).
@@ -199,7 +200,7 @@ export class MyObservables {
       const material = isIntersecting[1].material as StandardMaterial;
       if (isIntersecting[0]) {
         material.diffuseColor = blueColor;
-
+        scoreSound.play();
         //score += 1;
 
         var currentScore = parseInt(scoreTextblock.text);
