@@ -312,7 +312,7 @@ export class Util {
       PhysicsImpostor.BoxImpostor, {
         mass: 0,
         friction: 1,
-        restitution: 0
+        restitution: 0.5
       }
     )
 

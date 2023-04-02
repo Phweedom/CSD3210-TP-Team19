@@ -28,6 +28,9 @@ export class Spawner {
   ballType: BALLTYPE;
   mesh: Mesh;
   name: string;
+  liveBasketballs: Array<Mesh> = [];
+  liveBowlingballs: Array<Mesh> = [];
+  containerMesh: Mesh;
 
   /**
    * Constructs a new spawner.
@@ -51,8 +54,8 @@ export class Spawner {
 
     // create a cubic mesh that will be used for detecting clicks
     this.mesh = MeshBuilder.CreateBox(
-      this.name,
-      { size: 1, width: 1, height: 0.25 },
+      this.name + " spawner",
+      { size: 0.5, width: 0.1, height: 0.5 },
       scene
     );
     this.mesh.material = new StandardMaterial(
@@ -64,7 +67,142 @@ export class Spawner {
     spawnerMaterial.diffuseColor = Color3.Green();
     this.mesh.position = position;
 
+    // create a container that catches the balls
+    this.createContainer(
+      ballType,
+      position.add(new Vector3(0.5, -1, 0)),
+      this.scene
+    );
+
     this.initActions(ballType);
+
+    scene.onAfterRenderObservable.add(() => {
+      // limit basketballs
+      this.liveBasketballs = this.liveBasketballs.filter((ball, i) => {
+        const maxBalls = 9;
+        if (this.liveBasketballs.length - maxBalls > i) {
+          // out of bounds
+          ball.dispose();
+          return false;
+        }
+        return true;
+      });
+
+      // limit bowling balls
+      this.liveBowlingballs = this.liveBowlingballs.filter((ball, i) => {
+        const maxBalls = 9;
+        if (this.liveBowlingballs.length - maxBalls > i) {
+          // out of bounds
+          ball.dispose();
+          return false;
+        }
+        return true;
+      });
+    });
+  }
+
+  private createContainer(ballType: BALLTYPE, position: Vector3, scene: Scene) {
+    switch (ballType) {
+      case BALLTYPE.BASKETBALL:
+        const flatRamp = MeshBuilder.CreateBox(
+          "flatRamp",
+          { size: 0.7, width: 0.5, height: 0.05 },
+          this.scene
+        );
+        flatRamp.position = position.add(new Vector3(0, 0, -0.5));
+
+        const slopeRamp = MeshBuilder.CreateBox(
+          "flatRamp",
+          { size: 2, width: 0.5, height: 0.05 },
+          this.scene
+        );
+        slopeRamp.rotate(Vector3.Left(), -Math.PI / 6);
+        slopeRamp.position = position.add(new Vector3(0, 0.496, -1.7));
+
+        const ballStopper = MeshBuilder.CreateBox(
+          "ballStopper",
+          { size: 0.05, width: 0.5, height: 0.15 },
+          this.scene
+        );
+        ballStopper.position = position.add(new Vector3(0, 0.05, -0.13));
+
+        const flatLeftWall = MeshBuilder.CreateBox(
+          "flatLeftWall",
+          { size: 0.7, width: 0.05, height: 0.15 },
+          this.scene
+        );
+        flatLeftWall.position = position.add(new Vector3(-0.225, 0.05, -0.5));
+
+        const flatRightWall = MeshBuilder.CreateBox(
+          "flatRightWall",
+          { size: 0.7, width: 0.05, height: 0.15 },
+          this.scene
+        );
+        flatRightWall.position = position.add(new Vector3(0.225, 0.05, -0.5));
+
+        const slopeLeftWall = MeshBuilder.CreateBox(
+          "slopeLeftWall",
+          { size: 2.0, width: 0.05, height: 0.15 },
+          this.scene
+        );
+        slopeLeftWall.rotate(Vector3.Left(), -Math.PI / 6);
+        slopeLeftWall.position = position.add(new Vector3(-0.225, 0.55, -1.7));
+
+        const slopeRightWall = MeshBuilder.CreateBox(
+          "slopeRightWall",
+          { size: 2.0, width: 0.05, height: 0.15 },
+          this.scene
+        );
+        slopeRightWall.rotate(Vector3.Left(), -Math.PI / 6);
+        slopeRightWall.position = position.add(new Vector3(0.225, 0.55, -1.7));
+
+        const mergedMesh = Mesh.MergeMeshes(
+          [
+            flatRamp,
+            slopeRamp,
+            ballStopper,
+            flatLeftWall,
+            flatRightWall,
+            slopeLeftWall,
+            slopeRightWall,
+          ],
+          true,
+          true,
+          undefined,
+          false,
+          true
+        );
+
+        mergedMesh.physicsImpostor = new PhysicsImpostor(
+          mergedMesh,
+          PhysicsImpostor.MeshImpostor,
+          { mass: 0, friction: 1.0, restitution: 0.5 }
+        );
+
+        this.containerMesh = mergedMesh;
+
+        break;
+
+      case BALLTYPE.BOWLINGBALL:
+        const ballCatcher = MeshBuilder.CreateTorus(
+          "ballCatcher",
+          { diameter: 0.3, thickness: 0.1 },
+          scene
+        );
+        ballCatcher.position = position.add(new Vector3(-1.7, 0.3, -1.0));
+
+        ballCatcher.material = new StandardMaterial("ballCatcher", scene);
+        const ballCatcherMaterial = ballCatcher.material as StandardMaterial;
+        ballCatcherMaterial.alpha = 0.0;
+
+        ballCatcher.physicsImpostor = new PhysicsImpostor(
+          ballCatcher,
+          PhysicsImpostor.MeshImpostor,
+          { mass: 0, friction: 1, restitution: 0 }
+        );
+
+        break;
+    }
   }
 
   /**
@@ -78,7 +216,7 @@ export class Spawner {
       this.scene
     ));
 
-    // spawn a new atom when clicked
+    // spawn a new ball when clicked
     actionManager.registerAction(
       new ExecuteCodeAction(
         {
@@ -90,15 +228,20 @@ export class Spawner {
               segments: 16,
               diameter: 0.3,
             });
-            sphere.position = this.mesh.position.add(Vector3.Up());
+            sphere.position = this.mesh.position.add(
+              new Vector3(0.5, 0.2, -2.5)
+            );
             sphere.material = new StandardMaterial(
               "basketball material",
               this.scene
             );
-            const texture = new Texture("assets/textures/basketball.png", this.scene);
-    const basketballMaterial = sphere.material as StandardMaterial;
-    basketballMaterial.diffuseTexture = texture;
-    sphere.material = basketballMaterial;  
+            const texture = new Texture(
+              "assets/textures/basketball.png",
+              this.scene
+            );
+            const basketballMaterial = sphere.material as StandardMaterial;
+            basketballMaterial.diffuseTexture = texture;
+            sphere.material = basketballMaterial;
 
             sphere.metadata = {};
             sphere.metadata.value = false;
@@ -108,8 +251,55 @@ export class Spawner {
               sphere,
               PhysicsImpostor.SphereImpostor,
               {
-                mass: 0.5,
+                mass: 1.0,
+                friction: 1.0,
+                restitution: 0.8,
               }
+            );
+
+            this.liveBasketballs.push(sphere);
+
+            console.log(
+              "number of basketballs: " + this.liveBasketballs.length
+            );
+          } else if (ballType == BALLTYPE.BOWLINGBALL) {
+            var sphere = MeshBuilder.CreateSphere(this.name, {
+              segments: 16,
+              diameter: 0.3,
+            });
+            sphere.position = this.mesh.position.add(
+              new Vector3(-1.2, 0.4, -1.0)
+            );
+            sphere.material = new StandardMaterial(
+              "bowlingball material",
+              this.scene
+            );
+            const texture = new Texture(
+              "assets/textures/bowling.jpg",
+              this.scene
+            );
+            const bowlingballMaterial = sphere.material as StandardMaterial;
+            bowlingballMaterial.diffuseTexture = texture;
+            sphere.material = bowlingballMaterial;
+
+            sphere.metadata = {};
+            sphere.metadata.value = false;
+            Tags.AddTagsTo(sphere, "bowlingball");
+
+            sphere.physicsImpostor = new PhysicsImpostor(
+              sphere,
+              PhysicsImpostor.SphereImpostor,
+              {
+                mass: 5.0,
+                friction: 1.0,
+                restitution: 0.1,
+              }
+            );
+
+            this.liveBowlingballs.push(sphere);
+
+            console.log(
+              "number of bowlingballs: " + this.liveBowlingballs.length
             );
           }
         }
