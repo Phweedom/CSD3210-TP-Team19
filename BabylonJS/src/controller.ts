@@ -153,9 +153,9 @@ export class Controller {
                   ball.physicsImpostor.mass = 1;
 
                   const w = angularVelocity;
-                  const v = linearVelocity.scale(7);
+                  const v = linearVelocity.scale(5);
 
-                  const r = new Vector3(0, 0, -0.1);
+                  const r = new Vector3(0, 0, 0);
                   r.rotateByQuaternionToRef(
                     controller.grip.rotationQuaternion,
                     r
