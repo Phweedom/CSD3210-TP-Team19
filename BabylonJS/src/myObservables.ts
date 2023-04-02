@@ -273,6 +273,9 @@ export class MyObservables {
         var currentScore = parseInt(scoreTextblock.text);
         ++currentScore;
         scoreTextblock.text = currentScore.toString();
+        if(currentScore == 10) {
+          scoreTextblock.text = "STRIKE!";
+        }
         bowlingPin.dirty = true;
         //onFallObservable.notifyObservers(bowlingPin.mesh.metadata.value);
       }
