@@ -4,6 +4,7 @@ import {
   PhysicsImpostor,
   Scene,
   SceneLoader,
+  Tags,
   Vector3,
 } from "babylonjs";
 
@@ -63,5 +64,7 @@ export class BowlingPin {
         //disableBidirectionalTransformation: true
       }
     );
+
+   Tags.AddTagsTo(this.mesh, "bowlingpin");
   }
 }

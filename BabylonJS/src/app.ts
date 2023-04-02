@@ -61,7 +61,7 @@ export class App {
     // building the environment //////////////////////////////////////////////////////////////////
     // create cameras and lights (either use default or create your own)
     scene.createDefaultCameraOrLight(false, true, true);
-    scene.activeCamera.position = new Vector3(0, 1, 0);
+    scene.activeCamera.position = new Vector3(0, 2, 0);
     //Util.createCamera(scene, this.canvas);
     //Util.createLights(scene);
 

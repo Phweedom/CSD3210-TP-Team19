@@ -11,10 +11,12 @@ import {
   Texture,
   Vector3,
 } from "babylonjs";
+import { Environment } from "./environment";
 
 export enum BALLTYPE {
   BASKETBALL,
   BOWLINGBALL,
+  BOWLINGPIN
 }
 
 /**
@@ -31,6 +33,7 @@ export class Spawner {
   liveBasketballs: Array<Mesh> = [];
   liveBowlingballs: Array<Mesh> = [];
   containerMesh: Mesh;
+  environment: Environment;
 
   /**
    * Constructs a new spawner.
@@ -38,8 +41,9 @@ export class Spawner {
    * @param position is the location of this spawner.
    * @param scene is the scene where this spawner will be in.
    */
-  constructor(ballType: BALLTYPE, position: Vector3, scene: Scene) {
+  constructor(ballType: BALLTYPE, position: Vector3, environment: Environment, scene: Scene) {
     this.scene = scene;
+    this.environment = environment;
 
     // assigning the name based on input element
     switch (ballType) {
@@ -50,6 +54,10 @@ export class Spawner {
       case BALLTYPE.BOWLINGBALL:
         this.name = "bowlingball";
         break;
+
+        case BALLTYPE.BOWLINGPIN:
+          this.name = "bowlingpin";
+          break;
     }
 
     // create a cubic mesh that will be used for detecting clicks
@@ -74,6 +82,7 @@ export class Spawner {
       this.scene
     );
 
+    // spawning logic
     this.initActions(ballType);
 
     scene.onAfterRenderObservable.add(() => {
@@ -202,6 +211,9 @@ export class Spawner {
         );
 
         break;
+
+        default:
+          break;
     }
   }
 
@@ -301,6 +313,16 @@ export class Spawner {
             console.log(
               "number of bowlingballs: " + this.liveBowlingballs.length
             );
+          } else if (ballType == BALLTYPE.BOWLINGPIN) {
+
+
+              this.environment.liveBowlingPins.forEach(function (pin) {
+                pin.mesh.dispose();
+              })
+
+              this.environment.liveBowlingPins.splice(0);
+
+              this.environment.placeBowlingPins(this.scene);
           }
         }
       )
