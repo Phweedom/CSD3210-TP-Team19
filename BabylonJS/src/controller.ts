@@ -30,6 +30,20 @@ export class Controller {
     let mesh: AbstractMesh;
 
     let liveBalls: Array<Mesh> = [];
+
+    scene.onAfterRenderObservable.add(() => {
+      liveBalls = liveBalls.filter((ball, i) => {
+          const maxBalls = 3;
+          if (liveBalls.length - maxBalls > i) {
+              // out of bounds
+              ball.dispose();
+              return false;
+          }
+          return true;
+      });
+  });
+
+
     const newBalls = new Map<WebXRInputSource, Mesh>();
 
     // var sphere = MeshBuilder.CreateSphere("sphere1", {
@@ -108,7 +122,7 @@ export class Controller {
                     ball,
                     PhysicsImpostor.SphereImpostor,
                     {
-                      mass: 0.2,
+                      mass: 0.5,
                     }
                   );
 

@@ -54,8 +54,8 @@ export class Environment {
     );
 
     // add backboards
-    this.buildBackboard(new Vector3(0, 3.3, 6.04), scale, scene);
-    this.buildBackboard(new Vector3(0, 3.3, -6.04), scale, scene);
+    this.buildBackboard(new Vector3(0, 3.3, 6.18), scale, scene);
+    this.buildBackboard(new Vector3(0, 3.3, -6.18), scale, scene);
 
     // add scoreboard
     const scoreboard = this.buildScoreboard(new Vector3(2, 1, 4), scene);
@@ -194,7 +194,7 @@ export class Environment {
     const backboard = MeshBuilder.CreateBox(
       "backboard",
       {
-        size: 0.01,
+        size: 0.1,
         width: 0.59,
         height: 0.34,
       },
