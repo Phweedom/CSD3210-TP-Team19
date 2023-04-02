@@ -15,6 +15,8 @@ import { Util } from "./util";
 import { Spawner } from "./spawner";
 import { ScoreDetector } from "./scoreDetector";
 import { TextBlock } from "babylonjs-gui";
+import {BowlingPin} from "./bowlingPin"
+import { Basketball } from "./basketball";
 
 /**
  * Environment contains functions that are used for building a classroom environment.
@@ -33,7 +35,7 @@ export class Environment {
     this.basketballScore = 0;
     
     this.buildBasketballCourt(new Vector3(0, 0, 0), 3, scene);
-    this.buildBowling(new Vector3(10, 0, 0), 1, scene);
+    this.buildBowling(new Vector3(7.815, 0.65, 4.5), 30, scene);
   }
   
   buildBasketballCourt(position: Vector3, scale: number, scene: Scene) {
@@ -151,7 +153,34 @@ export class Environment {
   }
 
   buildBowling(position: Vector3, scale: number, scene: Scene) {
-    //TODO
+    
+    Util.loadModel(
+      "assets/models/",
+      "bowlingMachine.glb",
+      position,
+      scale,
+      scene
+    );
+
+    var i = 0;
+    while (i < 4) {
+      new BowlingPin(new Vector3(-1 + (i * 0.3), 0.9, 5), 0.3, scene);
+      i += 1;
+    }
+    i = 0;
+    while (i < 3) {
+      new BowlingPin(new Vector3(-0.8 + (i * 0.3), 0.9, 4.5), 0.3, scene);
+      i += 1;
+    }
+    i = 0;
+    while (i < 2) {
+      new BowlingPin(new Vector3(-0.6 + (i * 0.3), 0.9, 4), 0.3, scene);
+      i += 1;
+    }
+    new BowlingPin(new Vector3(-0.4, 0.9, 3.5), 0.3, scene);
+
+
+    const basketball = new Basketball(new Vector3(1, 0.65, 3), scene);
   }
 
   

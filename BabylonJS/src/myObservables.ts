@@ -128,55 +128,57 @@ export class MyObservables {
     scene.registerBeforeRender(function () {
       const basketballs = scene.getMeshesByTags("basketball");
       
-      var i = 0;
-      while (i < basketballs.length) {
-        if (basketballs[i].position.equals(Vector3.Zero())) {
-          //why they don't have not equal function
-        } else {
-          const spheresIntersecting = scoreDetector.mesh.intersectsMesh(
-            basketballs[i],
-            true,
-            true
-          );
-
-          if (spheresIntersecting) {
-            score += 1;
-            console.log(
-              "basketball and detector have intersected, basketball position is: " +
-              basketballs[i].position
-            );
-            onIntersectObservable.notifyObservers([
-              spheresIntersecting,
-              basketballs[i],
-            ]);
-          }
-        }
-        i += 1;
-      }
-
-
-      // basketballs.forEach(function (basketball) {
-      //   if (basketball.position.equals(Vector3.Zero())) {
+      // var i = 0;
+      // while (i < basketballs.length) {
+      //   if (basketballs[i].position.equals(Vector3.Zero()) ||basketballs[i].metadata.value == true) {
       //     //why they don't have not equal function
       //   } else {
       //     const spheresIntersecting = scoreDetector.mesh.intersectsMesh(
-      //       basketball,
+      //       basketballs[i],
       //       true,
       //       true
       //     );
 
       //     if (spheresIntersecting) {
+      //       basketballs[i].metadata.value = true;
+      //       //score += 1;
       //       console.log(
       //         "basketball and detector have intersected, basketball position is: " +
-      //           basketball.position
+      //         basketballs[i].position
       //       );
       //       onIntersectObservable.notifyObservers([
       //         spheresIntersecting,
-      //         basketball,
+      //         basketballs[i],
       //       ]);
       //     }
       //   }
-      // });
+      //   i += 1;
+      // }
+
+
+      basketballs.forEach(function (basketball) {
+        if (basketball.position.equals(Vector3.Zero()) || basketball.metadata.value == true) {
+          //why they don't have not equal function
+        } else {
+          const spheresIntersecting = scoreDetector.mesh.intersectsMesh(
+            basketball,
+            true,
+            true
+          );
+
+          if (spheresIntersecting) {
+            basketball.metadata.value = true;
+            console.log(
+              "basketball and detector have intersected, basketball position is: " +
+                basketball.position
+            );
+            onIntersectObservable.notifyObservers([
+              spheresIntersecting,
+              basketball,
+            ]);
+          }
+        }
+      });
     });
 
     // assign onIntersectObservable as the onIntersectObservable property of helloSphere.
@@ -196,10 +198,16 @@ export class MyObservables {
       const material = isIntersecting[1].material as StandardMaterial;
       if (isIntersecting[0]) {
         material.diffuseColor = blueColor;
-        //scene.getMeshByName("score counter").metadata.score += 1;
-        //scene.
-        score += 1;
-        scoreTextblock.text = score.toString(); 
+
+        //score += 1;
+
+        var currentScore = parseInt(scoreTextblock.text);
+        currentScore += 1;
+
+
+        scoreTextblock.text = currentScore.toString(); 
+
+
       }
     });
   }
