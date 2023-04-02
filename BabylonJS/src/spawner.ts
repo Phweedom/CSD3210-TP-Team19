@@ -8,6 +8,7 @@ import {
   Scene,
   StandardMaterial,
   Tags,
+  Texture,
   Vector3,
 } from "babylonjs";
 
@@ -94,6 +95,11 @@ export class Spawner {
               "basketball material",
               this.scene
             );
+            const texture = new Texture("assets/textures/basketball.png", this.scene);
+    const basketballMaterial = sphere.material as StandardMaterial;
+    basketballMaterial.diffuseTexture = texture;
+    sphere.material = basketballMaterial;  
+
             sphere.metadata = {};
             sphere.metadata.value = false;
             Tags.AddTagsTo(sphere, "basketball");
