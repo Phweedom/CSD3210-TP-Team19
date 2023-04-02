@@ -265,14 +265,16 @@ export class MyObservables {
       var radToDeg = Vector3.Zero();
       radToDeg.setAll(180 / Math.PI);
       const euler = bowlingPin.mesh.rotationQuaternion.toEulerAngles().multiply(radToDeg);
-      const dirty = bowlingPin.mesh.metadata.value; 
+      //const dirty = bowlingPin.mesh.metadata.value; 
+      const dirty = bowlingPin.dirty; 
 
       if (!dirty && ( Math.abs(euler.x) > 90 || Math.abs(euler.z) > 90 )) {
         // bowling pin has toppled, increment score
         var currentScore = parseInt(scoreTextblock.text);
         ++currentScore;
         scoreTextblock.text = currentScore.toString();
-        bowlingPin.mesh.metadata.value = true;
+        bowlingPin.dirty = true;
+        //onFallObservable.notifyObservers(bowlingPin.mesh.metadata.value);
       }
 
 
@@ -285,6 +287,10 @@ export class MyObservables {
 // assign onIntersectObservable as the onIntersectObservable property of helloSphere.
     // whenever onIntersectObservable emits an event, helloSphere will receive it.
     bowlingPin.onFallObservable = onFallObservable;
+
+    bowlingPin.onFallObservable.add((dirty) => {
+      onFallObservable.clear();
+    });
 
     };
 

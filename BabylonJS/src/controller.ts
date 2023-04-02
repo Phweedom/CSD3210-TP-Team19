@@ -150,14 +150,17 @@ export class Controller {
                   //   }
                   // );
 
+                  var velocityAmp = 0;
                   if (ball.name === "basketball") {
                     ball.physicsImpostor.mass = 1;
+                    velocityAmp = 4;
                   } else if (ball.name === "bowlingball") {
                     ball.physicsImpostor.mass = 5;
+                    velocityAmp = 2;
                   }
 
                   const w = angularVelocity;
-                  const v = linearVelocity.scale(5);
+                  const v = linearVelocity.scale(velocityAmp);
 
                   const r = new Vector3(0, 0, 0);
                   r.rotateByQuaternionToRef(

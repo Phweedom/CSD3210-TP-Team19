@@ -164,7 +164,7 @@ export class App {
     // snap xr camera to desired height (so that camera doesn't go down to ground level after teleportation)
     xr.baseExperience.sessionManager.onXRFrameObservable.add(() => {
       //xr.baseExperience.camera.position.y = 20;
-      xr.baseExperience.camera.position.y = 1;
+      xr.baseExperience.camera.position.y = 2;
     });
 
 

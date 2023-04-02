@@ -317,12 +317,16 @@ export class Spawner {
 
 
               this.environment.liveBowlingPins.forEach(function (pin) {
+                pin.onFallObservable.clear();
+                pin.onFallObservable = null;
                 pin.mesh.dispose();
               })
 
               this.environment.liveBowlingPins.splice(0);
 
               this.environment.placeBowlingPins(this.environment.bowlingScoreTextplane, this.scene);
+
+              this.environment.bowlingScoreTextplane.text = "0";
           }
         }
       )

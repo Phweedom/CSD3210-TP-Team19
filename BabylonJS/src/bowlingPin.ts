@@ -13,6 +13,7 @@ import { MyObservables } from "./myObservables";
 
 export class BowlingPin {
   mesh: Mesh;
+  dirty: Boolean;
   onFallObservable: Observable<boolean>
   constructor(position: Vector3, scaleFactor: number, scoreTextblock: TextBlock, scene: Scene) {
     // SceneLoader.ImportMeshAsync("", "assets/models/", "bowling_pin.glb", scene).then(
@@ -71,6 +72,8 @@ export class BowlingPin {
 
     this.mesh.metadata = {};
     this.mesh.metadata.value = false;
+
+    this.dirty = false;
 
     MyObservables.addBowlingScoreObservable(this, scoreTextblock, scene);
 
