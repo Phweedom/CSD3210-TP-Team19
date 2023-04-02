@@ -228,6 +228,21 @@ export class Util {
     skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
     skyboxMaterial.specularColor = new Color3(0, 0, 0);
     skybox.material = skyboxMaterial;
+
+    const animation = new Animation(
+      'rotationAnimation', 'rotation', 0.01,
+      Animation.ANIMATIONTYPE_VECTOR3,
+      Animation.ANIMATIONLOOPMODE_CYCLE
+    );
+    const keyFrames = [
+        {frame: 0, value: new Vector3(0, 0, 0)},
+        {frame: 30, value: new Vector3(0, 2 * Math.PI, 0)},
+    ]
+    animation.setKeys(keyFrames);
+
+    skybox.animations = [];
+    skybox.animations.push(animation);
+    scene.beginAnimation(skybox, 0, 30, true);
   }
 
   /**
