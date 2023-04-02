@@ -240,6 +240,14 @@ export class Environment {
       scene
     );
 
+    Util.loadModel(
+      "assets/models/",
+      "amogus.glb",
+      new Vector3(5.5, 0.635, -8),
+      9,
+      scene
+    );
+
     // add scoreboard
     const scoreboard = this.buildScoreboard(new Vector3(10, 2, 6), scene);
     this.bowlingScoreTextplane = scoreboard.textBlock;
