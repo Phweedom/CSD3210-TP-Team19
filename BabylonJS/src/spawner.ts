@@ -6,6 +6,7 @@ import {
   MeshBuilder,
   PhysicsImpostor,
   Scene,
+  Sound,
   StandardMaterial,
   Tags,
   Texture,
@@ -16,7 +17,7 @@ import { Environment } from "./environment";
 export enum BALLTYPE {
   BASKETBALL,
   BOWLINGBALL,
-  BOWLINGPIN
+  BOWLINGPIN,
 }
 
 /**
@@ -30,10 +31,11 @@ export class Spawner {
   ballType: BALLTYPE;
   mesh: Mesh;
   name: string;
-  liveBasketballs: Array<Mesh> = [];
-  liveBowlingballs: Array<Mesh> = [];
+  liveBasketballs: Array<Mesh>;
+  liveBowlingballs: Array<Mesh>;
   containerMesh: Mesh;
   environment: Environment;
+  button_sound: Sound;
 
   /**
    * Constructs a new spawner.
@@ -41,9 +43,16 @@ export class Spawner {
    * @param position is the location of this spawner.
    * @param scene is the scene where this spawner will be in.
    */
-  constructor(ballType: BALLTYPE, position: Vector3, environment: Environment, scene: Scene) {
+  constructor(
+    ballType: BALLTYPE,
+    position: Vector3,
+    environment: Environment,
+    scene: Scene
+  ) {
     this.scene = scene;
     this.environment = environment;
+    this.liveBasketballs = new Array<Mesh>;
+    this.liveBowlingballs = new Array<Mesh>;
 
     // assigning the name based on input element
     switch (ballType) {
@@ -55,9 +64,9 @@ export class Spawner {
         this.name = "bowlingball";
         break;
 
-        case BALLTYPE.BOWLINGPIN:
-          this.name = "bowlingpin";
-          break;
+      case BALLTYPE.BOWLINGPIN:
+        this.name = "bowlingpin";
+        break;
     }
 
     // create a cubic mesh that will be used for detecting clicks
@@ -108,6 +117,8 @@ export class Spawner {
         return true;
       });
     });
+
+    this.button_sound = new Sound('button_sound', 'assets/sounds/button_press.wav', scene, null);
   }
 
   private createContainer(ballType: BALLTYPE, position: Vector3, scene: Scene) {
@@ -212,8 +223,8 @@ export class Spawner {
 
         break;
 
-        default:
-          break;
+      default:
+        break;
     }
   }
 
@@ -235,6 +246,7 @@ export class Spawner {
           trigger: ActionManager.OnPickDownTrigger,
         },
         () => {
+          this.button_sound.play();
           if (ballType == BALLTYPE.BASKETBALL) {
             var sphere = MeshBuilder.CreateSphere(this.name, {
               segments: 16,
@@ -314,19 +326,24 @@ export class Spawner {
               "number of bowlingballs: " + this.liveBowlingballs.length
             );
           } else if (ballType == BALLTYPE.BOWLINGPIN) {
+            this.environment.liveBowlingPins.forEach(function (pin) {
+              pin.onFallObservable.clear();
+              pin.onFallObservable = null;
+              pin.mesh.dispose();
+            });
+            this.environment.liveBowlingPins.splice(0);
 
+            var liveBowlingballs = this.scene.getMeshesByTags("bowlingball");
+            liveBowlingballs.forEach(function (ball) {
+              ball.dispose();
+            });
 
-              this.environment.liveBowlingPins.forEach(function (pin) {
-                pin.onFallObservable.clear();
-                pin.onFallObservable = null;
-                pin.mesh.dispose();
-              })
+            this.environment.placeBowlingPins(
+              this.environment.bowlingScoreTextplane,
+              this.scene
+            );
 
-              this.environment.liveBowlingPins.splice(0);
-
-              this.environment.placeBowlingPins(this.environment.bowlingScoreTextplane, this.scene);
-
-              this.environment.bowlingScoreTextplane.text = "0";
+            this.environment.bowlingScoreTextplane.text = "0";
           }
         }
       )
