@@ -56,7 +56,7 @@ export class Environment {
     this.buildBackboard(new Vector3(0, 3.3, -6.03), scale, scene);
 
     // add scoreboard
-    const scoreboard = this.buildScoreboard(new Vector3(2, 1, 4), scene);
+    const scoreboard = this.buildScoreboard(new Vector3(0, 3.6, 6), scene);
     this.basketballScoreTextplane = scoreboard.textBlock;
 
     // create rim mesh
@@ -78,8 +78,8 @@ export class Environment {
       position.y,
       position.z,
       this.basketballScore.toString(),
-      "white",
       "black",
+      "orange",
       30,
       scene
     );
