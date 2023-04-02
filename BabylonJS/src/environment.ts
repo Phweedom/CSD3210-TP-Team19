@@ -8,6 +8,7 @@ import {
   PhysicsImpostor,
   Scene,
   StandardMaterial,
+  Tags,
   Vector3,
 } from "babylonjs";
 import { Atom, Element, TextPlane } from "./components/meshes";
@@ -63,6 +64,75 @@ export class Environment {
     // create rim mesh
     this.buildRim(new Vector3(0, 3, 5.7), scale, scene);
     this.buildRim(new Vector3(0, 3, -5.7), scale, scene);
+
+    // add colliders to fence
+    this.addWalls(scene);
+  }
+
+  addWalls(scene: Scene) {
+    const wall1 = MeshBuilder.CreateBox(
+      "wall1",
+      { size: 1, width: 12, height: 2.5 },
+      scene
+    );
+    wall1.position = new Vector3(0, 1.5, 8.8);
+    Tags.AddTagsTo(wall1, "wall");
+
+    const wall2 = MeshBuilder.CreateBox(
+      "wall2",
+      { size: 1, width: 12, height: 2.5 },
+      scene
+    );
+    wall2.position = new Vector3(0, 1.5, -8.8);
+    Tags.AddTagsTo(wall2, "wall");
+
+    const wall3 = MeshBuilder.CreateBox(
+      "wall3",
+      { size: 8, width: 0.25, height: 2.5 },
+      scene
+    );
+    wall3.position = new Vector3(-5.95, 1.5, 5.1);
+    Tags.AddTagsTo(wall3, "wall");
+
+    const wall4 = MeshBuilder.CreateBox(
+      "wall4",
+      { size: 8, width: 0.25, height: 2.5 },
+      scene
+    );
+    wall4.position = new Vector3(5.95, 1.5, 5.1);
+    Tags.AddTagsTo(wall4, "wall");
+
+    const wall5 = MeshBuilder.CreateBox(
+      "wall5",
+      { size: 8, width: 0.25, height: 2.5 },
+      scene
+    );
+    wall5.position = new Vector3(5.95, 1.5, -5.1);
+    Tags.AddTagsTo(wall5, "wall");
+
+    const wall6 = MeshBuilder.CreateBox(
+      "wall6",
+      { size: 8, width: 0.25, height: 2.5 },
+      scene
+    );
+    wall6.position = new Vector3(-5.95, 1.5, -5.1);
+    Tags.AddTagsTo(wall5, "wall6");
+
+    const wallMaterial = new StandardMaterial("wall material", scene);
+    wallMaterial.alpha = 0.0;
+
+    const walls = scene.getMeshesByTags("wall");
+    walls.forEach(function (wall) {
+      // add material
+      wall.material = wallMaterial;
+
+      // add physics impostor
+      wall.physicsImpostor = new PhysicsImpostor(
+        wall,
+        PhysicsImpostor.BoxImpostor,
+        { mass: 0, friction: 1, restitution: 1 }
+      );
+    });
   }
 
   buildScoreboard(position: Vector3, scene: Scene) {
@@ -178,11 +248,9 @@ export class Environment {
 
     // create pins at third row
     i = 0;
-    var thirdRowStartPoint = pinStartPoint.add(new Vector3(-0.30, 0, 0.50));
+    var thirdRowStartPoint = pinStartPoint.add(new Vector3(-0.3, 0, 0.5));
     while (i < 3) {
-      this.liveBowlingPins.push(
-        new BowlingPin(thirdRowStartPoint, 0.3, scene)
-      );
+      this.liveBowlingPins.push(new BowlingPin(thirdRowStartPoint, 0.3, scene));
       thirdRowStartPoint = thirdRowStartPoint.add(new Vector3(0.3, 0, 0));
       i += 1;
     }

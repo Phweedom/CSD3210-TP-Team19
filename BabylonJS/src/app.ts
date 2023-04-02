@@ -74,14 +74,14 @@ export class App {
     const environment = new Environment(scene);
 
     // temporary ball
-    const ball = new Basketball(new Vector3(0, 1, 1.5), scene);
-    
-    var sphere = MeshBuilder.CreateSphere("sphere1", {
-      segments: 16,
-      diameter: 0.3,
-    });
-    sphere.position = new Vector3(2, 2, 2);
-    sphere.material = new StandardMaterial("basketball material", scene);
+    //const ball = new Basketball(new Vector3(0, 1, 1.5), scene);
+
+    // var sphere = MeshBuilder.CreateSphere("sphere1", {
+    //   segments: 16,
+    //   diameter: 0.3,
+    // });
+    // sphere.position = new Vector3(2, 2, 2);
+    // sphere.material = new StandardMaterial("basketball material", scene);
     //Tags.AddTagsTo(sphere, "basketball")
 
 

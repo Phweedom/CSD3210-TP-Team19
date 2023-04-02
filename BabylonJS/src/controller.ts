@@ -85,21 +85,19 @@ export class Controller {
           squeezeButton.onButtonStateChangedObservable.add(() => {
             if (squeezeButton.changes.pressed) {
               if (squeezeButton.pressed) {
-                // const newBall = MeshBuilder.CreateSphere("sphere1", {
-                //   segments: 16,
-                //   diameter: 0.3,
-                // });
-                // newBall.material = new StandardMaterial("basketball material", scene);
-                // newBall.metadata = {};
-                // newBall.metadata.value = false;
-                // Tags.AddTagsTo(newBall, "basketball")
+                const newBall = MeshBuilder.CreateSphere("sphere1", {
+                  segments: 16,
+                  diameter: 0.3,
+                });
+                newBall.material = new StandardMaterial("basketball material", scene);
+                newBall.metadata = {};
+                newBall.metadata.value = false;
+                Tags.AddTagsTo(newBall, "basketball")
 
-                const newBall = new Basketball(Vector3.Zero(), scene);
-
-                newBall.mesh.isVisible = true;
-                newBall.mesh.setParent(controller.grip);
-                newBall.mesh.position = new Vector3(0, 0, -0.1);
-                newBalls.set(controller, newBall.mesh);
+                newBall.isVisible = true;
+                newBall.setParent(controller.grip);
+                newBall.position = new Vector3(0, 0, -0.1);
+                newBalls.set(controller, newBall);
               } else {
                 const ball = newBalls.get(controller);
 
