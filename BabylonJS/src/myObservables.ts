@@ -11,6 +11,7 @@ import { Basketball } from "./basketball";
 import { ScoreDetector } from "./scoreDetector";
 import * as CANNON from "cannon-es";
 import { TextBlock } from "babylonjs-gui";
+import { BowlingPin } from "./bowlingPin";
 
 /**
  * MyObservables contains functions that can add various observables to virtual objects.
@@ -211,6 +212,63 @@ export class MyObservables {
       }
     });
   }
+
+
+
+
+
+
+  static addBowlingScoreObservable(
+    bowlingPin: BowlingPin,
+    scoreTextblock: TextBlock,
+    scene: Scene
+  ) {
+    const onFallObservable = new Observable<boolean>();
+
+    // register a function to run before each frame of the scene is rendered. This function
+    // checks whether sphere is intersecting with helloSphere, and notifies onIntersectObservable
+    // with the result (true or false).
+    scene.registerBeforeRender(function () {
+      
+      if (bowlingPin.mesh.rotation.equals(Vector3.Zero())) {
+        // do nothing
+      } else {
+        // bowling pin has toppled, increment score
+        var currentScore = parseInt(scoreTextblock.text);
+        ++currentScore;
+        scoreTextblock.text = currentScore.toString();
+      }
+
+
+      });
+
+
+// assign onIntersectObservable as the onIntersectObservable property of helloSphere.
+    // whenever onIntersectObservable emits an event, helloSphere will receive it.
+    bowlingPin.onFallObservable = onFallObservable;
+
+    };
+
+    
+
+   
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   static addOnPositionChangeObservable(ball: Basketball, scene: Scene) {
     const onPositionhangeObservable = new Observable<[Vector3]>();

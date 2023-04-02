@@ -1,16 +1,20 @@
 import {
   Mesh,
   MeshBuilder,
+  Observable,
   PhysicsImpostor,
   Scene,
   SceneLoader,
   Tags,
   Vector3,
 } from "babylonjs";
+import { TextBlock } from "babylonjs-gui";
+import { MyObservables } from "./myObservables";
 
 export class BowlingPin {
   mesh: Mesh;
-  constructor(position: Vector3, scaleFactor: number, scene: Scene) {
+  onFallObservable: Observable<boolean>
+  constructor(position: Vector3, scaleFactor: number, scoreTextblock: TextBlock, scene: Scene) {
     // SceneLoader.ImportMeshAsync("", "assets/models/", "bowling_pin.glb", scene).then(
     //     (result) => {
     //       const root = result.meshes[0];
@@ -64,6 +68,8 @@ export class BowlingPin {
         //disableBidirectionalTransformation: true
       }
     );
+
+    MyObservables.addBowlingScoreObservable(this, scoreTextblock, scene);
 
    Tags.AddTagsTo(this.mesh, "bowlingpin");
   }

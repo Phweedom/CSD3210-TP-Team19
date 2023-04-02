@@ -29,11 +29,14 @@ export class Environment {
   scene: Scene;
   basketballScore: number;
   basketballScoreTextplane: TextBlock;
+  bowlingScore: number;
+  bowlingScoreTextplane: TextBlock;
   liveBowlingPins: Array<BowlingPin>;
 
   constructor(scene: Scene) {
     this.scene = scene;
     this.basketballScore = 0;
+    this.bowlingScore = 0;
     this.liveBowlingPins = new Array<BowlingPin>();
 
     // create a skybox
@@ -237,24 +240,37 @@ export class Environment {
       scene
     );
 
-    this.placeBowlingPins(scene);
+    // add scoreboard
+    const scoreboard = this.buildScoreboard(new Vector3(10, 2, 6), scene);
+    this.bowlingScoreTextplane = scoreboard.textBlock;
+
+    const scoreDetector = new ScoreDetector(
+      "bowling score detector",
+      scoreboard.mesh.position,
+      1,
+      this.bowlingScore,
+      this.bowlingScoreTextplane,
+      scene
+    );
+
+    this.placeBowlingPins(this.bowlingScoreTextplane, scene);
 
     const bowlingballSpawner = new Spawner(BALLTYPE.BOWLINGBALL, new Vector3(9.5, 1.5, -0.5), this, scene);
 
     const bowlingPinSpawner = new Spawner(BALLTYPE.BOWLINGPIN, new Vector3(9.5, 1.5, 5), this, scene);
   }
 
-  placeBowlingPins(scene: Scene) {
+  placeBowlingPins(scoreTextblock: TextBlock, scene: Scene) {
     // create pin at the front
     const pinStartPoint = new Vector3(7.83, 0.9, 7);
-    this.liveBowlingPins.push(new BowlingPin(pinStartPoint, 0.3, scene));
+    this.liveBowlingPins.push(new BowlingPin(pinStartPoint, 0.3, scoreTextblock, scene));
 
     // create pins at second row
     var i = 0;
     var secondRowStartPoint = pinStartPoint.add(new Vector3(-0.15, 0, 0.25));
     while (i < 2) {
       this.liveBowlingPins.push(
-        new BowlingPin(secondRowStartPoint, 0.3, scene)
+        new BowlingPin(secondRowStartPoint, 0.3, scoreTextblock, scene)
       );
       secondRowStartPoint = secondRowStartPoint.add(new Vector3(0.3, 0, 0));
       i += 1;
@@ -264,7 +280,7 @@ export class Environment {
     i = 0;
     var thirdRowStartPoint = pinStartPoint.add(new Vector3(-0.3, 0, 0.5));
     while (i < 3) {
-      this.liveBowlingPins.push(new BowlingPin(thirdRowStartPoint, 0.3, scene));
+      this.liveBowlingPins.push(new BowlingPin(thirdRowStartPoint, 0.3, scoreTextblock, scene));
       thirdRowStartPoint = thirdRowStartPoint.add(new Vector3(0.3, 0, 0));
       i += 1;
     }
@@ -273,12 +289,14 @@ export class Environment {
     var fourthRowStartPoint = pinStartPoint.add(new Vector3(-0.45, 0, 0.75));
     while (i < 4) {
       this.liveBowlingPins.push(
-        new BowlingPin(fourthRowStartPoint, 0.3, scene)
+        new BowlingPin(fourthRowStartPoint, 0.3, scoreTextblock, scene)
       );
       fourthRowStartPoint = fourthRowStartPoint.add(new Vector3(0.3, 0, 0));
       i += 1;
     }
 
     console.log("live pins created: " + this.liveBowlingPins.length);
+
+    console.log("pin rotation: " + this.liveBowlingPins[0].mesh.rotation);
   }
 }

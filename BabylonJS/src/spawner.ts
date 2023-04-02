@@ -322,7 +322,7 @@ export class Spawner {
 
               this.environment.liveBowlingPins.splice(0);
 
-              this.environment.placeBowlingPins(this.scene);
+              this.environment.placeBowlingPins(this.environment.bowlingScoreTextplane, this.scene);
           }
         }
       )
