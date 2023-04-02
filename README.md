@@ -121,7 +121,7 @@ Follow the instructions in <a href="#release">Build project for Release</a> for 
  5. Spawning
  >Press the Trigger Button when the pointer is pointed at a ball spawner to spawn a ball
  6. Movement
- >Point the Meta Quest 2 controller at the floor and old the tTrigger for 2 seconds. You will then teleport to that location. <br><br>*[Note that you will always snap to a certain height above the floor.]*
+ >Point the Meta Quest 2 controller at the floor and hold the Trigger for 2 seconds. You will then teleport to that location. <br><br>*[Note that you will always snap to a certain height above the floor.]*
 
 <br>
 
