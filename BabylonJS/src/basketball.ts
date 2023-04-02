@@ -1,13 +1,4 @@
-import {
-  Mesh,
-  MeshBuilder,
-  Observable,
-  PhysicsImpostor,
-  Scene,
-  StandardMaterial,
-  Tags,
-  Vector3,
-} from "babylonjs";
+import { Mesh, MeshBuilder, Observable, PhysicsImpostor, Scene, StandardMaterial, Tags, Texture, Vector3 } from "babylonjs";
 import * as CANNON from "cannon-es";
 import { MyObservables } from "./myObservables";
 
@@ -60,6 +51,11 @@ export class Basketball {
     );
 
     sphere.material = new StandardMaterial("basketball material", scene);
+    const texture = new Texture("assets/textures/basketball.png", this.scene);
+    const basketballMaterial = sphere.material as StandardMaterial;
+    basketballMaterial.diffuseTexture = texture;
+    sphere.material = basketballMaterial;        
+
     sphere.metadata = {};
     sphere.metadata.value = false;
     Tags.AddTagsTo(sphere, "basketball");
