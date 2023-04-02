@@ -108,7 +108,7 @@ export class Controller {
                     ball,
                     PhysicsImpostor.SphereImpostor,
                     {
-                      mass: 0.1,
+                      mass: 0.2,
                     }
                   );
 

@@ -57,7 +57,7 @@ export class BowlingPin {
       this.mesh,
       PhysicsImpostor.CylinderImpostor,
       {
-        mass: 0.0,
+        mass: 0.1,
         friction: 0.1,
         restitution: 0,
         //disableBidirectionalTransformation: true

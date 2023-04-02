@@ -15,6 +15,7 @@ export class ScoreDetector {
         this.mesh.material = new StandardMaterial(name + " material", scene);
         const scoreDetectorMaterial = this.mesh.material as StandardMaterial;
         scoreDetectorMaterial.diffuseColor = Color3.Red();
+        scoreDetectorMaterial.alpha = 0.0;
         this.mesh.position = position;
         this.mesh.scaling.setAll(scale);
 

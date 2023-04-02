@@ -54,8 +54,8 @@ export class Environment {
     );
 
     // add backboards
-    this.buildBackboard(new Vector3(0, 3.3, 6.03), scale, scene);
-    this.buildBackboard(new Vector3(0, 3.3, -6.03), scale, scene);
+    this.buildBackboard(new Vector3(0, 3.3, 6.04), scale, scene);
+    this.buildBackboard(new Vector3(0, 3.3, -6.04), scale, scene);
 
     // add scoreboard
     const scoreboard = this.buildScoreboard(new Vector3(2, 1, 4), scene);
@@ -116,7 +116,7 @@ export class Environment {
       scene
     );
     wall6.position = new Vector3(-5.95, 1.5, -5.1);
-    Tags.AddTagsTo(wall5, "wall6");
+    Tags.AddTagsTo(wall6, "wall");
 
     const wallMaterial = new StandardMaterial("wall material", scene);
     wallMaterial.alpha = 0.0;
@@ -175,7 +175,7 @@ export class Environment {
     );
     // make it transparent
     const rimMaterial = new StandardMaterial("rim material", scene);
-    rimMaterial.alpha = 1.0;
+    rimMaterial.alpha = 0.0;
     rim.material = rimMaterial;
 
     const scoreDetectorOffset = new Vector3(0, -0.2, 0);
@@ -195,8 +195,8 @@ export class Environment {
       "backboard",
       {
         size: 0.01,
-        width: 0.5,
-        height: 0.33,
+        width: 0.59,
+        height: 0.34,
       },
       scene
     );
@@ -214,7 +214,7 @@ export class Environment {
     );
     // make it transparent
     const backboardMaterial = new StandardMaterial("backboard material", scene);
-    backboardMaterial.alpha = 1.0;
+    backboardMaterial.alpha = 0.0;
     backboard.material = backboardMaterial;
   }
 
