@@ -32,14 +32,14 @@ export class Controller {
     let liveBalls: Array<Mesh> = [];
     const newBalls = new Map<WebXRInputSource, Mesh>();
 
-    var sphere = MeshBuilder.CreateSphere("sphere1", {
-      segments: 16,
-      diameter: 0.3,
-    });
-    sphere.material = new StandardMaterial("basketball material", scene);
-    sphere.metadata = {};
-    sphere.metadata.value = false;
-    Tags.AddTagsTo(sphere, "basketball")
+    // var sphere = MeshBuilder.CreateSphere("sphere1", {
+    //   segments: 16,
+    //   diameter: 0.3,
+    // });
+    // sphere.material = new StandardMaterial("basketball material", scene);
+    // sphere.metadata = {};
+    // sphere.metadata.value = false;
+    // Tags.AddTagsTo(sphere, "basketball")
 
     //whenever controller is available, run the callback function
     xr.input.onControllerAddedObservable.add((controller) => {
@@ -85,19 +85,21 @@ export class Controller {
           squeezeButton.onButtonStateChangedObservable.add(() => {
             if (squeezeButton.changes.pressed) {
               if (squeezeButton.pressed) {
-                const newBall = MeshBuilder.CreateSphere("sphere1", {
-                  segments: 16,
-                  diameter: 0.3,
-                });
-                newBall.material = new StandardMaterial("basketball material", scene);
-                newBall.metadata = {};
-                newBall.metadata.value = false;
-                Tags.AddTagsTo(newBall, "basketball")
+                // const newBall = MeshBuilder.CreateSphere("sphere1", {
+                //   segments: 16,
+                //   diameter: 0.3,
+                // });
+                // newBall.material = new StandardMaterial("basketball material", scene);
+                // newBall.metadata = {};
+                // newBall.metadata.value = false;
+                // Tags.AddTagsTo(newBall, "basketball")
 
-                newBall.isVisible = true;
-                newBall.setParent(controller.grip);
-                newBall.position = new Vector3(0, 0, -0.1);
-                newBalls.set(controller, newBall);
+                const newBall = new Basketball(Vector3.Zero(), scene);
+
+                newBall.mesh.isVisible = true;
+                newBall.mesh.setParent(controller.grip);
+                newBall.mesh.position = new Vector3(0, 0, -0.1);
+                newBalls.set(controller, newBall.mesh);
               } else {
                 const ball = newBalls.get(controller);
 

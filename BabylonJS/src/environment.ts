@@ -15,7 +15,7 @@ import { Util } from "./util";
 import { Spawner } from "./spawner";
 import { ScoreDetector } from "./scoreDetector";
 import { TextBlock } from "babylonjs-gui";
-import {BowlingPin} from "./bowlingPin"
+import { BowlingPin } from "./bowlingPin";
 import { Basketball } from "./basketball";
 
 /**
@@ -25,19 +25,20 @@ import { Basketball } from "./basketball";
  * @author Lim Min Ye
  */
 export class Environment {
-  
   scene: Scene;
   basketballScore: number;
   basketballScoreTextplane: TextBlock;
-  
+  liveBowlingPins: Array<BowlingPin>;
+
   constructor(scene: Scene) {
     this.scene = scene;
     this.basketballScore = 0;
-    
+    this.liveBowlingPins = new Array<BowlingPin>();
+
     this.buildBasketballCourt(new Vector3(0, 0, 0), 3, scene);
     this.buildBowling(new Vector3(7.815, 0.65, 4.5), 30, scene);
   }
-  
+
   buildBasketballCourt(position: Vector3, scale: number, scene: Scene) {
     // create a skybox
     Util.createSkybox(scene);
@@ -62,11 +63,6 @@ export class Environment {
     // create rim mesh
     this.buildRim(new Vector3(0, 3, 5.7), scale, scene);
     this.buildRim(new Vector3(0, 3, -5.7), scale, scene);
-
-    // rim for testing
-    this.buildRim(new Vector3(1, 1, 1), scale, scene);
-    
-    
   }
 
   buildScoreboard(position: Vector3, scene: Scene) {
@@ -153,7 +149,6 @@ export class Environment {
   }
 
   buildBowling(position: Vector3, scale: number, scene: Scene) {
-    
     Util.loadModel(
       "assets/models/",
       "bowlingMachine.glb",
@@ -162,26 +157,46 @@ export class Environment {
       scene
     );
 
-    var i = 0;
-    while (i < 4) {
-      new BowlingPin(new Vector3(-1 + (i * 0.3), 0.9, 5), 0.3, scene);
-      i += 1;
-    }
-    i = 0;
-    while (i < 3) {
-      new BowlingPin(new Vector3(-0.8 + (i * 0.3), 0.9, 4.5), 0.3, scene);
-      i += 1;
-    }
-    i = 0;
-    while (i < 2) {
-      new BowlingPin(new Vector3(-0.6 + (i * 0.3), 0.9, 4), 0.3, scene);
-      i += 1;
-    }
-    new BowlingPin(new Vector3(-0.4, 0.9, 3.5), 0.3, scene);
-
-
-    const basketball = new Basketball(new Vector3(1, 0.65, 3), scene);
+    this.placeBowlingPins(scene);
   }
 
-  
+  placeBowlingPins(scene: Scene) {
+    // create pin at the front
+    const pinStartPoint = new Vector3(7.83, 0.9, 7);
+    this.liveBowlingPins.push(new BowlingPin(pinStartPoint, 0.3, scene));
+
+    // create pins at second row
+    var i = 0;
+    var secondRowStartPoint = pinStartPoint.add(new Vector3(-0.15, 0, 0.25));
+    while (i < 2) {
+      this.liveBowlingPins.push(
+        new BowlingPin(secondRowStartPoint, 0.3, scene)
+      );
+      secondRowStartPoint = secondRowStartPoint.add(new Vector3(0.3, 0, 0));
+      i += 1;
+    }
+
+    // create pins at third row
+    i = 0;
+    var thirdRowStartPoint = pinStartPoint.add(new Vector3(-0.30, 0, 0.50));
+    while (i < 3) {
+      this.liveBowlingPins.push(
+        new BowlingPin(thirdRowStartPoint, 0.3, scene)
+      );
+      thirdRowStartPoint = thirdRowStartPoint.add(new Vector3(0.3, 0, 0));
+      i += 1;
+    }
+
+    i = 0;
+    var fourthRowStartPoint = pinStartPoint.add(new Vector3(-0.45, 0, 0.75));
+    while (i < 4) {
+      this.liveBowlingPins.push(
+        new BowlingPin(fourthRowStartPoint, 0.3, scene)
+      );
+      fourthRowStartPoint = fourthRowStartPoint.add(new Vector3(0.3, 0, 0));
+      i += 1;
+    }
+
+    console.log("live pins created: " + this.liveBowlingPins.length);
+  }
 }

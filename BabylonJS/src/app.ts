@@ -61,7 +61,7 @@ export class App {
     // building the environment //////////////////////////////////////////////////////////////////
     // create cameras and lights (either use default or create your own)
     scene.createDefaultCameraOrLight(false, true, true);
-    scene.activeCamera.position = new Vector3(0, 2, 0);
+    scene.activeCamera.position = new Vector3(0, 5, -3);
     //Util.createCamera(scene, this.canvas);
     //Util.createLights(scene);
 
@@ -74,7 +74,8 @@ export class App {
     const environment = new Environment(scene);
 
     // temporary ball
-    // const ball = new Basketball(new Vector3(0, 1, 1.5), scene);
+    const ball = new Basketball(new Vector3(0, 1, 1.5), scene);
+    
     var sphere = MeshBuilder.CreateSphere("sphere1", {
       segments: 16,
       diameter: 0.3,
@@ -82,6 +83,8 @@ export class App {
     sphere.position = new Vector3(2, 2, 2);
     sphere.material = new StandardMaterial("basketball material", scene);
     //Tags.AddTagsTo(sphere, "basketball")
+
+
     //////////////////////////////////////////////////////////////////////////////////////////////
 
 
