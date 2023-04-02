@@ -76,7 +76,7 @@ export class Environment {
     this.addWalls(scene);
 
     // add a basketball spawner
-    const basketballSpawner = new Spawner(BALLTYPE.BASKETBALL, new Vector3(-2, 2, 1), scene);
+    const basketballSpawner = new Spawner(BALLTYPE.BASKETBALL, new Vector3(-1.5, 2.5, 1), scene);
   }
 
   addWalls(scene: Scene) {
@@ -238,6 +238,8 @@ export class Environment {
     );
 
     this.placeBowlingPins(scene);
+
+    const bowlingballSpawner = new Spawner(BALLTYPE.BOWLINGBALL, new Vector3(9.5, 1.5, -0.5), scene);
   }
 
   placeBowlingPins(scene: Scene) {
