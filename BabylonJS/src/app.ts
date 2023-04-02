@@ -61,7 +61,7 @@ export class App {
     // building the environment //////////////////////////////////////////////////////////////////
     // create cameras and lights (either use default or create your own)
     scene.createDefaultCameraOrLight(false, true, true);
-    scene.activeCamera.position = new Vector3(0, 3, 0);
+    scene.activeCamera.position = new Vector3(0, 1, 0);
     //Util.createCamera(scene, this.canvas);
     //Util.createLights(scene);
 
@@ -93,7 +93,9 @@ export class App {
       sphere,
       PhysicsImpostor.SphereImpostor,
       {
-        mass: 0.5,
+        mass: 2.0,
+                friction: 0,
+                restitution: 0.8,
       }
     );
 

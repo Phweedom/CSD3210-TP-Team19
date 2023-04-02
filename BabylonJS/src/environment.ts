@@ -65,7 +65,7 @@ export class Environment {
     this.buildBackboard(new Vector3(0, 3.3, -6.18), scale, scene);
 
     // add scoreboard
-    const scoreboard = this.buildScoreboard(new Vector3(0, 3.6, 6), scene);
+    const scoreboard = this.buildScoreboard(new Vector3(0, 4.175, 6), scene);
     this.basketballScoreTextplane = scoreboard.textBlock;
 
     // create rim mesh
@@ -76,7 +76,7 @@ export class Environment {
     this.addWalls(scene);
 
     // add a basketball spawner
-    const basketballSpawner = new Spawner(BALLTYPE.BASKETBALL, new Vector3(-1, 1, 1), scene);
+    const basketballSpawner = new Spawner(BALLTYPE.BASKETBALL, new Vector3(-2, 2, 1), scene);
   }
 
   addWalls(scene: Scene) {
@@ -148,8 +148,8 @@ export class Environment {
   buildScoreboard(position: Vector3, scene: Scene) {
     const scoreboard = new TextPlane(
       "basketball scoreboard",
-      1,
-      1,
+      1.5,
+      0.75,
       position.x,
       position.y,
       position.z,
