@@ -33,7 +33,7 @@ export class Controller {
 
     scene.onAfterRenderObservable.add(() => {
       liveBalls = liveBalls.filter((ball, i) => {
-          const maxBalls = 3;
+          const maxBalls = 10;
           if (liveBalls.length - maxBalls > i) {
               // out of bounds
               ball.dispose();
