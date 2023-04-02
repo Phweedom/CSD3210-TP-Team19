@@ -62,6 +62,7 @@ export class App {
     // create cameras and lights (either use default or create your own)
     scene.createDefaultCameraOrLight(false, true, true);
     scene.activeCamera.position = new Vector3(0, 2, 0);
+    scene.activeCamera.position = new Vector3(8, 2, -2);
     //Util.createCamera(scene, this.canvas);
     //Util.createLights(scene);
 
@@ -73,7 +74,7 @@ export class App {
     //Environment.buildGameEnvironment(scene);
     const environment = new Environment(scene);
 
-    // temporary ball
+    // temporary scoring basketball
     var sphere = MeshBuilder.CreateSphere("basketball", {
       segments: 16,
       diameter: 0.3,
@@ -96,6 +97,29 @@ export class App {
         mass: 2.0,
                 friction: 0,
                 restitution: 0.8,
+      }
+    );
+
+    // temporary scoring bowlingball
+    var bowlingball = MeshBuilder.CreateSphere("bowlingball", {
+      segments: 16,
+      diameter: 0.3,
+    });
+    bowlingball.position = new Vector3(7.8, 8, 7);
+    bowlingball.material = new StandardMaterial("bowlingball material", scene);
+    const btexture = new Texture("assets/textures/bowling.jpg", scene);
+    const bowlingMaterial = bowlingball.material as StandardMaterial;
+    bowlingMaterial.diffuseTexture = btexture;
+    bowlingball.material = bowlingMaterial;  
+    Tags.AddTagsTo(bowlingball, "bowlingball")
+
+    bowlingball.physicsImpostor = new PhysicsImpostor(
+      bowlingball,
+      PhysicsImpostor.SphereImpostor,
+      {
+        mass: 5.0,
+                friction: 1.0,
+                restitution: 0.1,
       }
     );
 
@@ -140,10 +164,9 @@ export class App {
     // snap xr camera to desired height (so that camera doesn't go down to ground level after teleportation)
     xr.baseExperience.sessionManager.onXRFrameObservable.add(() => {
       //xr.baseExperience.camera.position.y = 20;
-      //xr.baseExperience.camera.position.y = 1;
+      xr.baseExperience.camera.position.y = 1;
     });
 
-    xr.baseExperience.camera.position.y = 2;
 
 
 

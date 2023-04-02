@@ -229,15 +229,54 @@ export class MyObservables {
     // checks whether sphere is intersecting with helloSphere, and notifies onIntersectObservable
     // with the result (true or false).
     scene.registerBeforeRender(function () {
+
+      // const firstPin = scene.getMeshesByTags("firstPin")[0];
+      // var radToDeg = Vector3.Zero();
+      // radToDeg.setAll(180 / Math.PI);
+      //const euler = firstPin.rotationQuaternion.toEulerAngles().multiply(radToDeg);
+      //console.log(euler);
+      //console.log("firstPin rotation: " + firstPin.rotationQuaternion.x + "   " + firstPin.rotationQuaternion.y);
       
-      if (bowlingPin.mesh.rotation.equals(Vector3.Zero())) {
-        // do nothing
-      } else {
+      // const originalPosition = bowlingPin.mesh.metadata.value[0];
+      // const distanceMoved = Vector3.Distance(originalPosition, bowlingPin.mesh.position);
+      // const dirty = bowlingPin.mesh.metadata.value[1];
+      // if (distanceMoved > 0.5 && !dirty) {
+      //   // bowling pin has toppled, increment score
+      //   var currentScore = parseInt(scoreTextblock.text);
+      //   ++currentScore;
+      //   scoreTextblock.text = currentScore.toString();
+      //   bowlingPin.mesh.metadata.value[1] = true;
+      // }
+
+      // const absoluteXRotation = Math.abs(bowlingPin.mesh.rotationQuaternion.x);
+      // const absoluteZRotation = Math.abs(bowlingPin.mesh.rotationQuaternion.z);
+      // const dirty = bowlingPin.mesh.metadata.value;      
+      // if (!dirty) {
+      //   if (absoluteXRotation > 0.5 || absoluteZRotation > 0.5) {
+      //     // bowling pin has toppled, increment score
+      //     var currentScore = parseInt(scoreTextblock.text);
+      //     ++currentScore;
+      //     scoreTextblock.text = currentScore.toString();
+  
+      //     bowlingPin.mesh.metadata.value = true;
+      //   }
+      // }
+
+      var radToDeg = Vector3.Zero();
+      radToDeg.setAll(180 / Math.PI);
+      const euler = bowlingPin.mesh.rotationQuaternion.toEulerAngles().multiply(radToDeg);
+      const dirty = bowlingPin.mesh.metadata.value; 
+
+      if (!dirty && ( Math.abs(euler.x) > 90 || Math.abs(euler.z) > 90 )) {
         // bowling pin has toppled, increment score
         var currentScore = parseInt(scoreTextblock.text);
         ++currentScore;
         scoreTextblock.text = currentScore.toString();
+        bowlingPin.mesh.metadata.value = true;
       }
+
+
+
 
 
       });

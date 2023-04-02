@@ -262,8 +262,10 @@ export class Environment {
 
   placeBowlingPins(scoreTextblock: TextBlock, scene: Scene) {
     // create pin at the front
-    const pinStartPoint = new Vector3(7.83, 0.9, 7);
-    this.liveBowlingPins.push(new BowlingPin(pinStartPoint, 0.3, scoreTextblock, scene));
+    const pinStartPoint = new Vector3(7.83, 0.9, 7.2);
+    const firstPin = new BowlingPin(pinStartPoint, 0.3, scoreTextblock, scene)
+    Tags.AddTagsTo(firstPin.mesh, "firstPin");
+    this.liveBowlingPins.push(firstPin);
 
     // create pins at second row
     var i = 0;
@@ -297,6 +299,6 @@ export class Environment {
 
     console.log("live pins created: " + this.liveBowlingPins.length);
 
-    console.log("pin rotation: " + this.liveBowlingPins[0].mesh.rotation);
+    console.log("first pin rotation: " + firstPin.mesh.rotation);
   }
 }

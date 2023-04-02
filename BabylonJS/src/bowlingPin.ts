@@ -69,6 +69,9 @@ export class BowlingPin {
       }
     );
 
+    this.mesh.metadata = {};
+    this.mesh.metadata.value = false;
+
     MyObservables.addBowlingScoreObservable(this, scoreTextblock, scene);
 
    Tags.AddTagsTo(this.mesh, "bowlingpin");
