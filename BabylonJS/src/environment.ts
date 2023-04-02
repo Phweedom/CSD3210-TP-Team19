@@ -13,7 +13,7 @@ import {
 } from "babylonjs";
 import { Atom, Element, TextPlane } from "./components/meshes";
 import { Util } from "./util";
-import { Spawner } from "./spawner";
+import { BALLTYPE, Spawner } from "./spawner";
 import { ScoreDetector } from "./scoreDetector";
 import { TextBlock } from "babylonjs-gui";
 import { BowlingPin } from "./bowlingPin";
@@ -36,14 +36,21 @@ export class Environment {
     this.basketballScore = 0;
     this.liveBowlingPins = new Array<BowlingPin>();
 
-    this.buildBasketballCourt(new Vector3(0, 0, 0), 3, scene);
-    this.buildBowling(new Vector3(7.815, 0.65, 4.5), 30, scene);
-  }
-
-  buildBasketballCourt(position: Vector3, scale: number, scene: Scene) {
     // create a skybox
     Util.createSkybox(scene);
 
+    this.buildBasketballCourt(new Vector3(0, 0, 0), 3, scene);
+    this.buildBowling(new Vector3(7.815, 0.65, 4.5), 30, scene);
+    this.buildSurroundingEnvironment(new Vector3(0, 0, 0), 1, scene);
+  }
+
+  buildSurroundingEnvironment(position: Vector3, scale: number, scene: Scene) {
+
+  }
+
+
+  buildBasketballCourt(position: Vector3, scale: number, scene: Scene) {
+  
     // load basketball court model
     Util.loadModel(
       "assets/models/",
@@ -67,6 +74,9 @@ export class Environment {
 
     // add colliders to fence
     this.addWalls(scene);
+
+    // add a basketball spawner
+    const basketballSpawner = new Spawner(BALLTYPE.BASKETBALL, new Vector3(-1, 1, 1), scene);
   }
 
   addWalls(scene: Scene) {
