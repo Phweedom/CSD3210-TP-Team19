@@ -92,8 +92,10 @@ This is for distributing the project to others.
     - `cd dist`
     - `python -m http.server`
 3. Open chrome and go to 'localhost:[portNo.]'
+4. If all the above step fails to build the project, open chrome and go to https://minye88.github.io/IPA
 
 *[Side Note: Download python here: https://www.python.org/downloads]*
+
 <hr>
 
 <div id='video_link'></div>
