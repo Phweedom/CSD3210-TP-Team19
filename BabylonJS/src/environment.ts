@@ -4,6 +4,7 @@ import {
   Color4,
   ExecuteCodeAction,
   GizmoManager,
+  Material,
   MeshBuilder,
   PhysicsImpostor,
   Scene,
@@ -335,6 +336,11 @@ export class Environment {
     bowlingPinSpawner.mesh.rotate(Vector3.Up(), Math.PI/2);
 
     this.addBowlingEnvironmentColliders(scene);
+
+    const bowlingTrack = MeshBuilder.CreateBox("bowlingTrack",{size: 8, width: 1.75, height: 0.25}, scene);
+    bowlingTrack.position.set(7.8, 0.8, 4.8);
+    bowlingTrack.material = new StandardMaterial("bowlingTrackMaterial", scene);
+    bowlingTrack.material.alpha = 0;
   }
 
   addBowlingEnvironmentColliders(scene: Scene) {
