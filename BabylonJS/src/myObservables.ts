@@ -16,6 +16,7 @@ import { ScoreDetector } from "./scoreDetector";
 import * as CANNON from "cannon-es";
 import { TextBlock } from "babylonjs-gui";
 import { BowlingPin } from "./bowlingPin";
+import { Bowlingball } from "./bowlingball";
 
 /**
  * MyObservables contains functions that can add various observables to virtual objects.
@@ -126,13 +127,18 @@ export class MyObservables {
     scene: Scene
   ) {
     const onIntersectObservable = new Observable<[boolean, Mesh]>();
-    const scoreSound = new Sound('scoreSound', 'assets/sounds/score.mp3', scene, null);
+    const scoreSound = new Sound(
+      "scoreSound",
+      "assets/sounds/score.mp3",
+      scene,
+      null
+    );
     // register a function to run before each frame of the scene is rendered. This function
     // checks whether sphere is intersecting with helloSphere, and notifies onIntersectObservable
     // with the result (true or false).
     scene.registerBeforeRender(function () {
       const basketballs = scene.getMeshesByTags("basketball");
-      
+
       // var i = 0;
       // while (i < basketballs.length) {
       //   if (basketballs[i].position.equals(Vector3.Zero()) ||basketballs[i].metadata.value == true) {
@@ -160,9 +166,11 @@ export class MyObservables {
       //   i += 1;
       // }
 
-
       basketballs.forEach(function (basketball) {
-        if (basketball.position.equals(Vector3.Zero()) || basketball.metadata.value == true) {
+        if (
+          basketball.position.equals(Vector3.Zero()) ||
+          basketball.metadata.value == true
+        ) {
           //why they don't have not equal function
         } else {
           const spheresIntersecting = scoreDetector.mesh.intersectsMesh(
@@ -179,18 +187,23 @@ export class MyObservables {
             );
             scoreSound.play();
             //score += 1;
-    
+
             var currentScore = parseInt(scoreTextblock.text);
             currentScore += 1;
-    
-    
+
             scoreTextblock.text = currentScore.toString();
 
             //Emit particles at location of scoring
-            const particleSystem = new ParticleSystem("particleSystem", 5000, scene);
-            particleSystem.particleTexture = new Texture("assets/textures/Flare.png");
-            particleSystem.minEmitBox = new Vector3(0, 0, 0)
-            particleSystem.maxEmitBox = new Vector3(0, 0, 0)
+            const particleSystem = new ParticleSystem(
+              "particleSystem",
+              5000,
+              scene
+            );
+            particleSystem.particleTexture = new Texture(
+              "assets/textures/Flare.png"
+            );
+            particleSystem.minEmitBox = new Vector3(0, 0, 0);
+            particleSystem.maxEmitBox = new Vector3(0, 0, 0);
             particleSystem.worldOffset = basketball.position;
             particleSystem.emitRate = 1000;
             particleSystem.targetStopDuration = 0.05;
@@ -203,7 +216,6 @@ export class MyObservables {
             particleSystem.minSize = 0.1;
             particleSystem.maxSize = 0.1;
             particleSystem.start();
-    
 
             // onIntersectObservable.notifyObservers([
             //   spheresIntersecting,
@@ -237,60 +249,40 @@ export class MyObservables {
     //     var currentScore = parseInt(scoreTextblock.text);
     //     currentScore += 1;
 
-
-    //     scoreTextblock.text = currentScore.toString(); 
-
+    //     scoreTextblock.text = currentScore.toString();
 
     //   }
     // });
   }
 
+  static addBounceObservable(basketball: Basketball) {
+    const onBounceObservable = new Observable<Boolean>();
 
-static addBounceObservable(basketball: Basketball){
-  const onBounceObservable = new Observable<Boolean>();
-  
-  basketball.scene.registerBeforeRender(function () {
+    basketball.scene.registerBeforeRender(function () {
+      if (basketball.timeAfterLastBounce < basketball.bounceCooldown) {
+        basketball.timeAfterLastBounce += 1 / 60;
+      } else {
+        const groundMesh = basketball.scene.getMeshesByTags("ground")[0];
 
-    //console.log("dt: " + basketball.scene.deltaTime);
+        const distance = basketball.mesh.position.y - groundMesh.position.y;
 
-    if (basketball.timeAfterLastBounce < basketball.bounceCooldown) {
-      basketball.timeAfterLastBounce += (1/60);
-      console.log(basketball.timeAfterLastBounce);
-      
-      //console.log("on cooldown");
-    } else {
-      //console.log("finish cooldown");
-      const groundMesh = basketball.scene.getMeshesByTags("ground")[0];
-      
-      const distance = basketball.mesh.position.y - groundMesh.position.y;
-      //console.log(distance);
-      
-      if (distance < 0.5 && (!basketball.mesh.parent) ) {
-        basketball.timeAfterLastBounce = 0.0;
-        console.log("bounce");
-        basketball.bounceSound.play();
+        if (distance < 0.5 && !basketball.mesh.parent) {
+          basketball.timeAfterLastBounce = 0.0;
+          basketball.bounceSound.play();
+        }
       }
-
-    }
-
-
-    
-    
-    
-
-
-
-
-
     });
 
+    basketball.onBounceObservable = onBounceObservable;
+  }
 
-// assign onIntersectObservable as the onIntersectObservable property of helloSphere.
-  // whenever onIntersectObservable emits an event, helloSphere will receive it.
-  basketball.onBounceObservable = onBounceObservable;
-}
+  static addRollingObservable(bowlingball: Bowlingball) {
+    const onRollingObservable = new Observable<Boolean>();
 
-
+    bowlingball.scene.registerBeforeRender(function () {
+      // if smth smth then play sound
+    })
+  }
 
   static addBowlingScoreObservable(
     bowlingPin: BowlingPin,
@@ -298,13 +290,19 @@ static addBounceObservable(basketball: Basketball){
     scene: Scene
   ) {
     const onFallObservable = new Observable<boolean>();
-    const pinSound = new Sound('pinHitSound', 'assets/sounds/PinHit.wav', scene, null, {loop: false, autoplay: false, spatialSound: true});
+    const pinSound = new Sound(
+      "pinHitSound",
+      "assets/sounds/PinHit.wav",
+      scene,
+      null,
+      { loop: false, autoplay: false, spatialSound: true }
+    );
 
     //Particles
     const particleSystem = new ParticleSystem("particleSystemPin", 500, scene);
     particleSystem.particleTexture = new Texture("assets/textures/Flare.png");
-    particleSystem.minEmitBox = new Vector3(0, 0, 0)
-    particleSystem.maxEmitBox = new Vector3(0, 0, 0)
+    particleSystem.minEmitBox = new Vector3(0, 0, 0);
+    particleSystem.maxEmitBox = new Vector3(0, 0, 0);
     particleSystem.worldOffset = bowlingPin.mesh.position;
     particleSystem.emitRate = 300;
     particleSystem.targetStopDuration = 0.05;
@@ -321,14 +319,13 @@ static addBounceObservable(basketball: Basketball){
     // checks whether sphere is intersecting with helloSphere, and notifies onIntersectObservable
     // with the result (true or false).
     scene.registerBeforeRender(function () {
-
       // const firstPin = scene.getMeshesByTags("firstPin")[0];
       // var radToDeg = Vector3.Zero();
       // radToDeg.setAll(180 / Math.PI);
       //const euler = firstPin.rotationQuaternion.toEulerAngles().multiply(radToDeg);
       //console.log(euler);
       //console.log("firstPin rotation: " + firstPin.rotationQuaternion.x + "   " + firstPin.rotationQuaternion.y);
-      
+
       // const originalPosition = bowlingPin.mesh.metadata.value[0];
       // const distanceMoved = Vector3.Distance(originalPosition, bowlingPin.mesh.position);
       // const dirty = bowlingPin.mesh.metadata.value[1];
@@ -342,30 +339,32 @@ static addBounceObservable(basketball: Basketball){
 
       // const absoluteXRotation = Math.abs(bowlingPin.mesh.rotationQuaternion.x);
       // const absoluteZRotation = Math.abs(bowlingPin.mesh.rotationQuaternion.z);
-      // const dirty = bowlingPin.mesh.metadata.value;      
+      // const dirty = bowlingPin.mesh.metadata.value;
       // if (!dirty) {
       //   if (absoluteXRotation > 0.5 || absoluteZRotation > 0.5) {
       //     // bowling pin has toppled, increment score
       //     var currentScore = parseInt(scoreTextblock.text);
       //     ++currentScore;
       //     scoreTextblock.text = currentScore.toString();
-  
+
       //     bowlingPin.mesh.metadata.value = true;
       //   }
       // }
 
       var radToDeg = Vector3.Zero();
       radToDeg.setAll(180 / Math.PI);
-      const euler = bowlingPin.mesh.rotationQuaternion.toEulerAngles().multiply(radToDeg);
-      //const dirty = bowlingPin.mesh.metadata.value; 
-      const dirty = bowlingPin.dirty; 
+      const euler = bowlingPin.mesh.rotationQuaternion
+        .toEulerAngles()
+        .multiply(radToDeg);
+      //const dirty = bowlingPin.mesh.metadata.value;
+      const dirty = bowlingPin.dirty;
 
-      if (!dirty && ( Math.abs(euler.x) > 90 || Math.abs(euler.z) > 90 )) {
+      if (!dirty && (Math.abs(euler.x) > 90 || Math.abs(euler.z) > 90)) {
         // bowling pin has toppled, increment score
         var currentScore = parseInt(scoreTextblock.text);
         ++currentScore;
         scoreTextblock.text = currentScore.toString();
-        if(currentScore == 10) {
+        if (currentScore == 10) {
           scoreTextblock.text = "STRIKE!";
         }
         bowlingPin.dirty = true;
@@ -373,50 +372,22 @@ static addBounceObservable(basketball: Basketball){
 
         //PLAY SOUND
         pinSound.setPosition(bowlingPin.mesh.position);
-        pinSound.setPlaybackRate(0.8 + 0.4 * Math.random())
+        pinSound.setPlaybackRate(0.8 + 0.4 * Math.random());
         pinSound.play();
 
         //Play particle
         particleSystem.start();
       }
+    });
 
-
-
-
-
-      });
-
-
-// assign onIntersectObservable as the onIntersectObservable property of helloSphere.
+    // assign onIntersectObservable as the onIntersectObservable property of helloSphere.
     // whenever onIntersectObservable emits an event, helloSphere will receive it.
     bowlingPin.onFallObservable = onFallObservable;
 
     bowlingPin.onFallObservable.add((dirty) => {
       onFallObservable.clear();
     });
-
-    };
-
-    
-
-   
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  }
 
   // static addOnPositionChangeObservable(ball: Basketball, scene: Scene) {
   //   const onPositionhangeObservable = new Observable<[Vector3]>();

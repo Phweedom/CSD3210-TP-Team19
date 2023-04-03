@@ -14,6 +14,7 @@ import {
 } from "babylonjs";
 import { Environment } from "./environment";
 import { Basketball } from "./basketball";
+import {Bowlingball} from "./bowlingball";
 
 export enum BALLTYPE {
   BASKETBALL,
@@ -33,7 +34,7 @@ export class Spawner {
   mesh: Mesh;
   name: string;
   liveBasketballs: Array<Basketball>;
-  liveBowlingballs: Array<Mesh>;
+  liveBowlingballs: Array<Bowlingball>;
   containerMesh: Mesh;
   environment: Environment;
   button_sound: Sound;
@@ -53,7 +54,7 @@ export class Spawner {
     this.scene = scene;
     this.environment = environment;
     this.liveBasketballs = new Array<Basketball>;
-    this.liveBowlingballs = new Array<Mesh>;
+    this.liveBowlingballs = new Array<Bowlingball>;
 
     // assigning the name based on input element
     switch (ballType) {
@@ -112,7 +113,7 @@ export class Spawner {
         const maxBalls = 9;
         if (this.liveBowlingballs.length - maxBalls > i) {
           // out of bounds
-          ball.dispose();
+          ball.mesh.dispose();
           return false;
         }
         return true;
@@ -325,7 +326,9 @@ export class Spawner {
               }
             );
 
-            this.liveBowlingballs.push(sphere);
+            const bowlingball = new Bowlingball(sphere, this.scene);
+
+            this.liveBowlingballs.push(bowlingball);
 
             console.log(
               "number of bowlingballs: " + this.liveBowlingballs.length
