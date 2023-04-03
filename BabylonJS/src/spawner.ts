@@ -209,7 +209,7 @@ export class Spawner {
           { diameter: 0.3, thickness: 0.1 },
           scene
         );
-        ballCatcher.position = position.add(new Vector3(-1.7, 0.3, -1.0));
+        ballCatcher.position = position.add(new Vector3(-1.6, 0.3, 0.03));
 
         ballCatcher.material = new StandardMaterial("ballCatcher", scene);
         const ballCatcherMaterial = ballCatcher.material as StandardMaterial;
@@ -291,8 +291,9 @@ export class Spawner {
               segments: 16,
               diameter: 0.3,
             });
+            // bowling ball spawn position here
             sphere.position = this.mesh.position.add(
-              new Vector3(-1.2, 0.4, -1.0)
+              new Vector3(-1.1, 1, 0.03)
             );
             sphere.material = new StandardMaterial(
               "bowlingball material",

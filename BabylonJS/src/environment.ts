@@ -264,7 +264,7 @@ export class Environment {
     );
 
     // add scoreboard
-    const scoreboard = this.buildScoreboard(new Vector3(10, 2, 6), scene);
+    const scoreboard = this.buildScoreboard(new Vector3(7.814, 3.118, 8.06), scene);
     this.bowlingScoreTextplane = scoreboard.textBlock;
 
     const scoreDetector = new ScoreDetector(
@@ -278,9 +278,11 @@ export class Environment {
 
     this.placeBowlingPins(this.bowlingScoreTextplane, scene);
 
-    const bowlingballSpawner = new Spawner(BALLTYPE.BOWLINGBALL, new Vector3(9.5, 1.5, -0.5), this, scene);
+    const bowlingballSpawner = new Spawner(BALLTYPE.BOWLINGBALL, new Vector3(9.408, 1.5, -1.525), this, scene);
 
-    const bowlingPinSpawner = new Spawner(BALLTYPE.BOWLINGPIN, new Vector3(9.5, 1.5, 5), this, scene);
+    // add reset switch
+    const bowlingPinSpawner = new Spawner(BALLTYPE.BOWLINGPIN, new Vector3(9.215, 3.0, 8.149), this, scene);
+    bowlingPinSpawner.mesh.rotate(Vector3.Up(), Math.PI/2);
 
     this.addBowlingEnvironmentColliders(scene);
   }
