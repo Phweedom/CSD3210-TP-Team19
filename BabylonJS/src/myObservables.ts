@@ -265,7 +265,7 @@ static addBounceObservable(basketball: Basketball){
       const distance = basketball.mesh.position.y - groundMesh.position.y;
       //console.log(distance);
       
-      if (distance < 0.5) {
+      if (distance < 0.5 && (!basketball.mesh.parent) ) {
         basketball.timeAfterLastBounce = 0.0;
         console.log("bounce");
         basketball.bounceSound.play();
