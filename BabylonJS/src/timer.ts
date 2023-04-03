@@ -12,23 +12,18 @@ import {
   import { TextPlane } from "./components/meshes";
   import { Environment } from "./environment";
 
-  export enum TIMERTYPE {
-    BASKETBALL,
-    BOWLING,
-  }
-
 /**
- * Spawner is an object that spawns new atoms whenever it is clicked on.
+ * Timer is an object that counts down whenever it is clicked on.
  *
- * @class Spawner
+ * @class Timer
  * @author Quah Joon Hui Conant
  */
 export class Timer {
   scene: Scene;
-  timerType: TIMERTYPE;
-  countDownTimer: Number;
+  totalTime: number;
   buttonPosition: Vector3;
-  timerPosition: Vector3
+  timerPosition: Vector3;
+  textPlane: TextPlane
   mesh: Mesh;
   name: string;
   environment: Environment;
@@ -36,31 +31,19 @@ export class Timer {
   /**
    * Constructs a new spawner.
    *
-   * @param position is the location of this spawner.
+   * @param position is the location of this .
    * @param scene is the scene where this spawner will be in.
    */
-  constructor(timerType: TIMERTYPE,
-              buttonPosition: Vector3,
+  constructor(buttonPosition: Vector3,
               timerPosition: Vector3,
-              totalTime: Number,
+              totalTime: number,
               environment: Environment,
               scene: Scene) {
     this.scene = scene;
     this.environment = environment;
-    this.countDownTimer = 60;
+    this.totalTime = totalTime;
     this.buttonPosition = buttonPosition;
     this.timerPosition = timerPosition;
-
-    // assigning the name based on input element
-    switch (timerType) {
-      case TIMERTYPE.BASKETBALL:
-        this.name = "basketball";
-        break;
-
-      case TIMERTYPE.BOWLING:
-        this.name = "bowlingball";
-        break;
-    }
 
     // create a cubic mesh that will be used for detecting clicks
     this.mesh = MeshBuilder.CreateBox(
@@ -77,8 +60,10 @@ export class Timer {
       timerMaterial.diffuseColor = Color3.Red();
       this.mesh.position = this.buttonPosition;
 
+      this.textPlane = this.buildTimer(this.timerPosition, this.totalTime, this.scene);
+
       // timer logic
-    this.initActions(timerType);
+    this.initActions();
   }
 
   buildTimer(position: Vector3, totalTime: Number, scene: Scene) : TextPlane{
@@ -98,39 +83,40 @@ export class Timer {
       return timer;
   }
 
+  startCountdown(){
+    this.textPlane.textBlock.text = "Timer: " + this.totalTime + "s";
+    let countDownTimer = this.totalTime;
+
+    // Update the timer text block every second
+    const intervalId = setInterval(() => {
+        countDownTimer--;
+        this.textPlane.textBlock.text = "Timer: " + countDownTimer + "s";
+        if (countDownTimer === 0) {
+            clearInterval(intervalId); // Stop the timer when it reaches 0
+        }
+    }, 1000);
+  }
+
   /**
-   * initActions registers an action (which is to spawn a new atom). It is triggered
+   * initActions registers an action (which is to start the tier). It is triggered
    * when pressing down the mouse button or when a VR controller trigger is squeezed down.
    *
-   * @param element to spawn
    */
-  private initActions(timerType: TIMERTYPE) {
+  private initActions() {
     const actionManager = (this.mesh.actionManager = new ActionManager(
       this.scene
     ));
 
-    // spawn a new ball when clicked
+    // start timer when clicked
     actionManager.registerAction(
       new ExecuteCodeAction(
         {
           trigger: ActionManager.OnPickDownTrigger,
         },
         () => {
-            if (timerType == TIMERTYPE.BASKETBALL) {
-                const timer = this.buildTimer(this.timerPosition, this.countDownTimer, this.scene);
                 // Start the countdown timer
-                setInterval(function() {
-                    let countdown = 60;
-                    countdown--;
-                    timer.textBlock.text = "Timer: " + countdown + "s";
-                }, 1000);
-                console.log("basketball timer spawned");
-            } 
-            
-            else if (timerType == TIMERTYPE.BOWLING) {
-                this.buildTimer(this.timerPosition, this.countDownTimer, this.scene);
-                console.log("bowling timer spawned");
-            } 
+                this.startCountdown();
+                console.log("timer spawned");
         }
       )
     );
