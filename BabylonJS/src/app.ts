@@ -63,7 +63,7 @@ export class App {
     // building the environment //////////////////////////////////////////////////////////////////
     // create cameras and lights (either use default or create your own)
     scene.createDefaultCameraOrLight(false, true, true);
-    scene.activeCamera.position.set(8, 3, -3);
+    scene.activeCamera.position.set(0, 3, 0);
     //scene.activeCamera.position = new Vector3(8, 2, -2);
     //Util.createCamera(scene, this.canvas);
     //Util.createLights(scene);
@@ -81,7 +81,7 @@ export class App {
       segments: 16,
       diameter: 0.3,
     });
-    sphere.position = new Vector3(0, 8, 5.8);
+    sphere.position = new Vector3(0, 3, 5.8);
     sphere.material = new StandardMaterial("basketball material", scene);
     const texture = new Texture("assets/textures/basketball.png", scene);
     const basketballMaterial = sphere.material as StandardMaterial;
@@ -98,7 +98,7 @@ export class App {
       {
         mass: 2.0,
                 friction: 0,
-                restitution: 0.8,
+                restitution: 1,
       }
     );
 
