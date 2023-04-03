@@ -76,20 +76,20 @@ export class Environment {
     this.buildRim(new Vector3(0, 3, -5.7), scale, scene);
 
     // add colliders to fence
-    this.addWalls(scene);
+    this.addBasketballEnvironmentColliders(scene);
 
     // add a basketball spawner
     const basketballSpawner = new Spawner(BALLTYPE.BASKETBALL, new Vector3(-1.5, 3, 1), this, scene);
   }
 
-  addWalls(scene: Scene) {
+  addBasketballEnvironmentColliders(scene: Scene) {
     const wall1 = MeshBuilder.CreateBox(
       "wall1",
       { size: 1, width: 12, height: 2.5 },
       scene
     );
     wall1.position = new Vector3(0, 1.5, 8.8);
-    Tags.AddTagsTo(wall1, "wall");
+    Tags.AddTagsTo(wall1, "basketballEnvironmentCollider");
 
     const wall2 = MeshBuilder.CreateBox(
       "wall2",
@@ -97,7 +97,7 @@ export class Environment {
       scene
     );
     wall2.position = new Vector3(0, 1.5, -8.8);
-    Tags.AddTagsTo(wall2, "wall");
+    Tags.AddTagsTo(wall2, "basketballEnvironmentCollider");
 
     const wall3 = MeshBuilder.CreateBox(
       "wall3",
@@ -105,7 +105,7 @@ export class Environment {
       scene
     );
     wall3.position = new Vector3(-5.95, 1.5, 5.1);
-    Tags.AddTagsTo(wall3, "wall");
+    Tags.AddTagsTo(wall3, "basketballEnvironmentCollider");
 
     const wall4 = MeshBuilder.CreateBox(
       "wall4",
@@ -113,7 +113,7 @@ export class Environment {
       scene
     );
     wall4.position = new Vector3(5.95, 1.5, 5.1);
-    Tags.AddTagsTo(wall4, "wall");
+    Tags.AddTagsTo(wall4, "basketballEnvironmentCollider");
 
     const wall5 = MeshBuilder.CreateBox(
       "wall5",
@@ -121,7 +121,7 @@ export class Environment {
       scene
     );
     wall5.position = new Vector3(5.95, 1.5, -5.1);
-    Tags.AddTagsTo(wall5, "wall");
+    Tags.AddTagsTo(wall5, "basketballEnvironmentCollider");
 
     const wall6 = MeshBuilder.CreateBox(
       "wall6",
@@ -129,12 +129,13 @@ export class Environment {
       scene
     );
     wall6.position = new Vector3(-5.95, 1.5, -5.1);
-    Tags.AddTagsTo(wall6, "wall");
+    Tags.AddTagsTo(wall6, "basketballEnvironmentCollider");
 
     const wallMaterial = new StandardMaterial("wall material", scene);
     wallMaterial.alpha = 0.0;
 
-    const walls = scene.getMeshesByTags("wall");
+    const walls = scene.getMeshesByTags("basketballEnvironmentCollider");
+    //console.log("number of objects with basketballEnvironmentCollider tag: " + walls.length);
     walls.forEach(function (wall) {
       // add material
       wall.material = wallMaterial;
@@ -266,6 +267,93 @@ export class Environment {
     const bowlingballSpawner = new Spawner(BALLTYPE.BOWLINGBALL, new Vector3(9.5, 1.5, -0.5), this, scene);
 
     const bowlingPinSpawner = new Spawner(BALLTYPE.BOWLINGPIN, new Vector3(9.5, 1.5, 5), this, scene);
+
+    this.addBowlingEnvironmentColliders(scene);
+  }
+
+  addBowlingEnvironmentColliders(scene: Scene) {
+    const leftBoundary = MeshBuilder.CreateBox(
+      "leftBoundary",
+      { size: 8, width: 0.2, height: 0.5 },
+      scene
+    );
+    leftBoundary.position = new Vector3(6.365, 0.7, 4.9);
+    Tags.AddTagsTo(leftBoundary, "bowlingEnvironmentCollider");
+
+    const rightBoundary = MeshBuilder.CreateBox(
+      "rightBoundary",
+      { size: 8, width: 0.2, height: 0.5 },
+      scene
+    );
+    rightBoundary.position = new Vector3(9.26, 0.7, 4.9);
+    Tags.AddTagsTo(rightBoundary, "bowlingEnvironmentCollider");
+
+    const Digibowl = MeshBuilder.CreateBox(
+      "Digibowl",
+      { size: 0.5, width: 3.3, height: 1.2 },
+      scene
+    );
+    Digibowl.position = new Vector3(7.815, 2.168, 8.35);
+    Tags.AddTagsTo(Digibowl, "bowlingEnvironmentCollider");
+
+    const DigibowlLeft = MeshBuilder.CreateBox(
+      "DigibowlLeft",
+      { size: 0.5, width: 0.3, height: 0.6 },
+      scene
+    );
+    DigibowlLeft.position = new Vector3(6.318, 1.28, 8.348);
+    Tags.AddTagsTo(DigibowlLeft, "bowlingEnvironmentCollider");
+
+    const DigibowlRight = MeshBuilder.CreateBox(
+      "DigibowlRight",
+      { size: 0.5, width: 0.3, height: 0.6 },
+      scene
+    );
+    DigibowlRight.position = new Vector3(9.314, 1.28, 8.348);
+    Tags.AddTagsTo(DigibowlRight, "bowlingEnvironmentCollider");
+
+    const wallMaterial = new StandardMaterial("wall material", scene);
+    wallMaterial.alpha = 0.0;
+
+    const walls = scene.getMeshesByTags("bowlingEnvironmentCollider");
+    walls.forEach(function (wall) {
+      // add material
+      wall.material = wallMaterial;
+
+      // add physics impostor
+      wall.physicsImpostor = new PhysicsImpostor(
+        wall,
+        PhysicsImpostor.BoxImpostor,
+        { mass: 0, friction: 0.1, restitution: 0.1 }
+      );
+    });
+
+    const gutterMaterial = new StandardMaterial("gutter material", scene);
+    gutterMaterial.diffuseColor = Color3.Black();
+    
+    const leftGutter = MeshBuilder.CreateBox(
+      "leftGutter",
+      { size: 9, width: 0.45, height: 0.5 },
+      scene
+    );
+    leftGutter.position = new Vector3(6.68, 0.4, 5.38);
+    leftGutter.material = gutterMaterial;
+
+    const rightGutter = MeshBuilder.CreateBox(
+      "rightGutter",
+      { size: 9, width: 0.45, height: 0.5 },
+      scene
+    );
+    rightGutter.position = new Vector3(8.946, 0.4, 5.38);
+    rightGutter.material = gutterMaterial;
+
+    const alleyEnd = MeshBuilder.CreateBox(
+      "alleyEnd",
+      { size: 1.5, width: 2.5, height: 0.5 },
+      scene
+    );
+    alleyEnd.position = new Vector3(7.836, 0.41, 9.777);
+    alleyEnd.material = gutterMaterial;
   }
 
   placeBowlingPins(scoreTextblock: TextBlock, scene: Scene) {

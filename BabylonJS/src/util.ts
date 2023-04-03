@@ -354,7 +354,7 @@ export class Util {
       const pickResult = scene.pick(event.clientX, event.clientY);
 
       if (pickResult.hit) {
-        console.log(pickResult.pickedMesh?.name);
+        console.log(pickResult.pickedMesh?.name + " position: " + pickResult.pickedMesh?.position);
       }
     });
   }
