@@ -43,9 +43,9 @@
     
 	-  `package.json` is the JSON file listing the details of this project and its dependencies along with scripts that could be run through npm.
     
--  `tsconfig.json` is the configuration file for transpiling from written TS code into JS code.
+	-  `tsconfig.json` is the configuration file for transpiling from written TS code into JS code.
     
--  `webpack.config.js` is the configuration file for the webpack.
+	-  `webpack.config.js` is the configuration file for the webpack.
 
 -  `README.md` is this file you are reading.
 
