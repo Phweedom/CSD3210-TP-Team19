@@ -13,7 +13,7 @@ import {
 import { Atom, Compound, Element } from "./components/meshes";
 import { Basketball } from "./basketball";
 import { ScoreDetector } from "./scoreDetector";
-import * as CANNON from "cannon-es";
+//import * as CANNON from "cannon-es";
 import { TextBlock } from "babylonjs-gui";
 import { BowlingPin } from "./bowlingPin";
 

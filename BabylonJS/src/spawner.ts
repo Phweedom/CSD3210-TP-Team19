@@ -248,6 +248,9 @@ export class Spawner {
         () => {
           this.button_sound.play();
           if (ballType == BALLTYPE.BASKETBALL) {
+            const diameter = 0.3;
+            const bounceSound = new Sound('bounceSound', 'assets/sounds/Bounce.wav', this.scene, null);
+
             var sphere = MeshBuilder.CreateSphere(this.name, {
               segments: 16,
               diameter: 0.3,
@@ -281,6 +284,16 @@ export class Spawner {
                 restitution: 1,
               }
             );
+
+            //Bounce Effect
+            this.scene.registerBeforeRender(function() {
+              const ground = this.scene.getMeshesByTags("ground")[0];
+              if(
+                Vector3.Distance(sphere.position, ground.position) > diameter
+                ){
+                  bounceSound.play();
+                }
+            });
 
             this.liveBasketballs.push(sphere);
 
