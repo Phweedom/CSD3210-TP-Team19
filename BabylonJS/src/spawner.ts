@@ -13,6 +13,7 @@ import {
   Vector3,
 } from "babylonjs";
 import { Environment } from "./environment";
+import { Basketball } from "./basketball";
 
 export enum BALLTYPE {
   BASKETBALL,
@@ -31,7 +32,7 @@ export class Spawner {
   ballType: BALLTYPE;
   mesh: Mesh;
   name: string;
-  liveBasketballs: Array<Mesh>;
+  liveBasketballs: Array<Basketball>;
   liveBowlingballs: Array<Mesh>;
   containerMesh: Mesh;
   environment: Environment;
@@ -51,7 +52,7 @@ export class Spawner {
   ) {
     this.scene = scene;
     this.environment = environment;
-    this.liveBasketballs = new Array<Mesh>;
+    this.liveBasketballs = new Array<Basketball>;
     this.liveBowlingballs = new Array<Mesh>;
 
     // assigning the name based on input element
@@ -100,7 +101,7 @@ export class Spawner {
         const maxBalls = 9;
         if (this.liveBasketballs.length - maxBalls > i) {
           // out of bounds
-          ball.dispose();
+          ball.mesh.dispose();
           return false;
         }
         return true;
@@ -248,9 +249,6 @@ export class Spawner {
         () => {
           this.button_sound.play();
           if (ballType == BALLTYPE.BASKETBALL) {
-            const diameter = 0.3;
-            const bounceSound = new Sound('bounceSound', 'assets/sounds/Bounce.wav', this.scene, null);
-
             var sphere = MeshBuilder.CreateSphere(this.name, {
               segments: 16,
               diameter: 0.3,
@@ -285,17 +283,9 @@ export class Spawner {
               }
             );
 
-            //Bounce Effect
-            this.scene.registerBeforeRender(function() {
-              const ground = this.scene.getMeshesByTags("ground")[0];
-              if(
-                Vector3.Distance(sphere.position, ground.position) > diameter
-                ){
-                  bounceSound.play();
-                }
-            });
+            const basketball = new Basketball(sphere, this.scene);
 
-            this.liveBasketballs.push(sphere);
+            this.liveBasketballs.push(basketball);
 
             console.log(
               "number of basketballs: " + this.liveBasketballs.length

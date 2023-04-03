@@ -19,6 +19,7 @@ import {
   SceneLoader,
   Sound,
   StandardMaterial,
+  Tags,
   Texture,
   UniversalCamera,
   Vector3,
@@ -339,6 +340,8 @@ export class Util {
         restitution: 1
       }
     )
+
+    Tags.AddTagsTo(ground, "ground");
 
     return ground;
   }
