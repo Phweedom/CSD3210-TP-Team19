@@ -174,10 +174,20 @@ export class MyObservables {
               "basketball and detector have intersected, basketball position is: " +
                 basketball.position
             );
-            onIntersectObservable.notifyObservers([
-              spheresIntersecting,
-              basketball,
-            ]);
+            scoreSound.play();
+            //score += 1;
+    
+            var currentScore = parseInt(scoreTextblock.text);
+            currentScore += 1;
+    
+    
+            scoreTextblock.text = currentScore.toString(); 
+    
+
+            // onIntersectObservable.notifyObservers([
+            //   spheresIntersecting,
+            //   basketball,
+            // ]);
           }
         }
       });
@@ -187,31 +197,31 @@ export class MyObservables {
     // whenever onIntersectObservable emits an event, helloSphere will receive it.
     scoreDetector.onIntersectObservable = onIntersectObservable;
 
-    // storing red and white colors in variables
-    const redColor = Color3.Red();
-    const whiteColor = Color3.White();
-    const blueColor = Color3.Blue();
+    // // storing red and white colors in variables
+    // const redColor = Color3.Red();
+    // const whiteColor = Color3.White();
+    // const blueColor = Color3.Blue();
 
     // add a listener to the helloSphere.onIntersectObservable. Whenever onIntersectObservable
     // emits an event (aka when the two spheres intersect or stop intersecting), the callback
     // function below will be called with the boolean value indicating whether the two spheres
     // are intersecting.
-    scoreDetector.onIntersectObservable.add((isIntersecting) => {
-      const material = isIntersecting[1].material as StandardMaterial;
-      if (isIntersecting[0]) {
-        material.diffuseColor = blueColor;
-        scoreSound.play();
-        //score += 1;
+    // scoreDetector.onIntersectObservable.add((isIntersecting) => {
+    //   const material = isIntersecting[1].material as StandardMaterial;
+    //   if (isIntersecting[0]) {
+    //     //material.diffuseColor = blueColor;
+    //     scoreSound.play();
+    //     //score += 1;
 
-        var currentScore = parseInt(scoreTextblock.text);
-        currentScore += 1;
-
-
-        scoreTextblock.text = currentScore.toString(); 
+    //     var currentScore = parseInt(scoreTextblock.text);
+    //     currentScore += 1;
 
 
-      }
-    });
+    //     scoreTextblock.text = currentScore.toString(); 
+
+
+    //   }
+    // });
   }
 
 
