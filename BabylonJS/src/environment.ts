@@ -134,7 +134,7 @@ export class Environment {
     const basketballSpawner = new Spawner(BALLTYPE.BASKETBALL, new Vector3(-1.2, 3, 0.8), this, scene);
 
     // add a basketball countdown timer
-    const basketballTimer = new Timer(new Vector3(1.2, 3, 0.8), new Vector3(0, 3.6, 6), 3, this, scene);
+    const basketballTimer = new Timer(new Vector3(1.2, 3, 0.8), new Vector3(0, 4.8, 6), 30, this, scene);
   }
 
   addBasketballEnvironmentColliders(scene: Scene) {
@@ -337,7 +337,7 @@ export class Environment {
     const bowlingballSpawner = new Spawner(BALLTYPE.BOWLINGBALL, new Vector3(9.408, 1.5, -1.525), this, scene);
 
     // add bowling countdown timer
-    const bowlingTimer = new Timer(new Vector3(9.408, 2.5, -1.525), new Vector3(9.408, 1.5, 8), 3, this, scene);
+    const bowlingTimer = new Timer(new Vector3(9.408, 2.5, -1.525), new Vector3(7.815, 3.8, 8.06), 30, this, scene);
 
     // add reset switch
     const bowlingPinSpawner = new Spawner(BALLTYPE.BOWLINGPIN, new Vector3(9.215, 3.0, 8.149), this, scene);
