@@ -37,13 +37,13 @@
    
 	-  `src/Component folder` - contains all the different class object that can be created in BabylonJS such as text plane. This is done for easier creation of object instead of having repeated codes.
     
--  `.gitignore` is for ignoring certain files when committing to source control. The `node_modules` folder is ignored and the next section details how to get the relevant dependcies for setting up the web app.
+-  `.gitignore` is for ignoring certain files when committing to source control. The `node_modules` folder is ignored and the next section details how to get the relevant dependencies for setting up the web app.
     
 -  `package.json` is the JSON file listing the details of this project and its dependencies along with scripts that could be run through npm.
     
 -  `README.md` is this file you are reading.
     
--  `tsconfig.json` is the configuration file for transpiling from written TS code into JS code.
+-  `tsconfig.json` is the configuration file for transpiring from written TS code into JS code.
     
 -  `webpack.config.js` is the configuration file for the webpack.
 
@@ -80,7 +80,7 @@ For every changes made to the project, the project will be rebuilt and the chang
 
 1. Make sure that the directory is in the base development folder 'BabylonJS'
 2. Run this command in the terminal `npm run serve`
-2. Open chrome and go to 'localhost:[portNo.]'
+2. Open chrome and go to `localhost:[portNo.]`. For our project, by default, it should be `localhost:[3000]`.
 
 <div id='release'></div>
 
@@ -91,7 +91,7 @@ This is for distributing the project to others.
 2. From the base project path (inside BabylonJS), run the command on terminal:
     - `cd dist`
     - `python -m http.server`
-3. Open chrome and go to 'localhost:[portNo.]'
+3. Open chrome and go to `localhost:[portNo.]`. 
 4. If all the above step fails to build the project, open chrome and go to https://minye88.github.io/IPA
 
 *[Side Note: Download python here: https://www.python.org/downloads]*
@@ -112,18 +112,21 @@ Application was tested in Meta Quest 2.
 
 Follow the instructions in <a href="#release">Build project for Release</a> for setup of project before testing the interactions.
 
+*For the best experience, it is advisable to try this application with the audio turned on before entering XR mode (this can be done so by pressing the button at the top left corner of the window)*
+
  1. Look around
  >To look around, simply turn your head around while wearing the Meta Quest 2 headset.
  2. Grabbing
- >To grab an object, move close to the object and reach out to the object with the Meta Quest 2 controller, then hold the trigger to grab the object.
+ >To grab an object, move close to the object and reach out to the object with the Meta Quest 2 controller, then hold the grab button to grab the object.
  3. Release
- >To let go of the object, release the trigger.
+ >To let go of the object, release the grab button.
  4. Throwing
  >Swing your arm and release the Grab Button to throw the ball
  5. Spawning
- >Press the Trigger Button when the pointer is pointed at a ball spawner to spawn a ball
+ >Press the Trigger Button when the pointer is pointed at a spawner to spawn a basketball, bowling ball or bowling pins.
  6. Movement
- >Point the Meta Quest 2 controller at the floor and hold the Trigger for 2 seconds. You will then teleport to that location. <br><br>*[Note that you will always snap to a certain height above the floor.]*
+ >Point the Meta Quest 2 controller at the floor and hold the Trigger for 2 seconds. You will then teleport to that location. <br>*[Note that you will always snap to a certain height above the floor.]*
+
 
 <br>
 
