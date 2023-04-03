@@ -19,6 +19,7 @@ import {
   SceneLoader,
   Sound,
   StandardMaterial,
+  Tags,
   Texture,
   UniversalCamera,
   Vector3,
@@ -96,6 +97,12 @@ export class Util {
         root.position = position;
         root.rotate(Vector3.Up(), Math.PI/2);
         root.scaling.scaleInPlace(scaleFactor);
+
+        result.meshes.forEach(mesh => {
+          if (mesh.material) {
+              mesh.material.backFaceCulling = true;
+          }
+      });
       }
     );
     // SceneLoader.ImportMesh("", filepath, modelname, scene, function (result) {
@@ -222,6 +229,21 @@ export class Util {
     skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
     skyboxMaterial.specularColor = new Color3(0, 0, 0);
     skybox.material = skyboxMaterial;
+
+    const animation = new Animation(
+      'rotationAnimation', 'rotation', 0.01,
+      Animation.ANIMATIONTYPE_VECTOR3,
+      Animation.ANIMATIONLOOPMODE_CYCLE
+    );
+    const keyFrames = [
+        {frame: 0, value: new Vector3(0, 0, 0)},
+        {frame: 30, value: new Vector3(0, 2 * Math.PI, 0)},
+    ]
+    animation.setKeys(keyFrames);
+
+    skybox.animations = [];
+    skybox.animations.push(animation);
+    scene.beginAnimation(skybox, 0, 30, true);
   }
 
   /**
@@ -294,7 +316,10 @@ export class Util {
     scene: Scene
   )/*: GroundMesh*/ : Mesh{
     const groundMaterial = new StandardMaterial("ground material", scene);
-    groundMaterial.alpha = 0.0;
+    groundMaterial.alpha = 1.0;
+    groundMaterial.backFaceCulling = true;
+    groundMaterial.diffuseTexture = new Texture("assets/textures/grass.png", scene);
+    groundMaterial.diffuseColor = new Color3(0.35, 0.5, 0.25);
 
     const ground = MeshBuilder.CreateBox(
       "ground",
@@ -316,6 +341,8 @@ export class Util {
       }
     )
 
+    Tags.AddTagsTo(ground, "ground");
+
     return ground;
   }
 
@@ -330,7 +357,7 @@ export class Util {
       const pickResult = scene.pick(event.clientX, event.clientY);
 
       if (pickResult.hit) {
-        console.log(pickResult.pickedMesh?.name);
+        console.log(pickResult.pickedMesh?.name + " position: " + pickResult.pickedMesh?.position);
       }
     });
   }

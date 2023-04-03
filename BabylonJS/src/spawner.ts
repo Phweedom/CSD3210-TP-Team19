@@ -6,15 +6,20 @@ import {
   MeshBuilder,
   PhysicsImpostor,
   Scene,
+  Sound,
   StandardMaterial,
   Tags,
   Texture,
   Vector3,
 } from "babylonjs";
+import { Environment } from "./environment";
+import { Basketball } from "./basketball";
+import {Bowlingball} from "./bowlingball";
 
 export enum BALLTYPE {
   BASKETBALL,
   BOWLINGBALL,
+  BOWLINGPIN,
 }
 
 /**
@@ -28,9 +33,11 @@ export class Spawner {
   ballType: BALLTYPE;
   mesh: Mesh;
   name: string;
-  liveBasketballs: Array<Mesh> = [];
-  liveBowlingballs: Array<Mesh> = [];
+  liveBasketballs: Array<Basketball>;
+  liveBowlingballs: Array<Bowlingball>;
   containerMesh: Mesh;
+  environment: Environment;
+  button_sound: Sound;
 
   /**
    * Constructs a new spawner.
@@ -38,8 +45,16 @@ export class Spawner {
    * @param position is the location of this spawner.
    * @param scene is the scene where this spawner will be in.
    */
-  constructor(ballType: BALLTYPE, position: Vector3, scene: Scene) {
+  constructor(
+    ballType: BALLTYPE,
+    position: Vector3,
+    environment: Environment,
+    scene: Scene
+  ) {
     this.scene = scene;
+    this.environment = environment;
+    this.liveBasketballs = new Array<Basketball>;
+    this.liveBowlingballs = new Array<Bowlingball>;
 
     // assigning the name based on input element
     switch (ballType) {
@@ -49,6 +64,10 @@ export class Spawner {
 
       case BALLTYPE.BOWLINGBALL:
         this.name = "bowlingball";
+        break;
+
+      case BALLTYPE.BOWLINGPIN:
+        this.name = "bowlingpin";
         break;
     }
 
@@ -74,6 +93,7 @@ export class Spawner {
       this.scene
     );
 
+    // spawning logic
     this.initActions(ballType);
 
     scene.onAfterRenderObservable.add(() => {
@@ -82,7 +102,7 @@ export class Spawner {
         const maxBalls = 9;
         if (this.liveBasketballs.length - maxBalls > i) {
           // out of bounds
-          ball.dispose();
+          ball.mesh.dispose();
           return false;
         }
         return true;
@@ -93,12 +113,14 @@ export class Spawner {
         const maxBalls = 9;
         if (this.liveBowlingballs.length - maxBalls > i) {
           // out of bounds
-          ball.dispose();
+          ball.mesh.dispose();
           return false;
         }
         return true;
       });
     });
+
+    this.button_sound = new Sound('button_sound', 'assets/sounds/button_press.wav', scene, null);
   }
 
   private createContainer(ballType: BALLTYPE, position: Vector3, scene: Scene) {
@@ -189,7 +211,7 @@ export class Spawner {
           { diameter: 0.3, thickness: 0.1 },
           scene
         );
-        ballCatcher.position = position.add(new Vector3(-1.7, 0.3, -1.0));
+        ballCatcher.position = position.add(new Vector3(-1.6, 0.3, 0.03));
 
         ballCatcher.material = new StandardMaterial("ballCatcher", scene);
         const ballCatcherMaterial = ballCatcher.material as StandardMaterial;
@@ -201,6 +223,9 @@ export class Spawner {
           { mass: 0, friction: 1, restitution: 0 }
         );
 
+        break;
+
+      default:
         break;
     }
   }
@@ -223,6 +248,7 @@ export class Spawner {
           trigger: ActionManager.OnPickDownTrigger,
         },
         () => {
+          this.button_sound.play();
           if (ballType == BALLTYPE.BASKETBALL) {
             var sphere = MeshBuilder.CreateSphere(this.name, {
               segments: 16,
@@ -253,11 +279,14 @@ export class Spawner {
               {
                 mass: 1.0,
                 friction: 1.0,
-                restitution: 0.8,
+                //restitution: 0.8,
+                restitution: 1,
               }
             );
 
-            this.liveBasketballs.push(sphere);
+            const basketball = new Basketball(sphere, this.scene);
+
+            this.liveBasketballs.push(basketball);
 
             console.log(
               "number of basketballs: " + this.liveBasketballs.length
@@ -267,8 +296,9 @@ export class Spawner {
               segments: 16,
               diameter: 0.3,
             });
+            // bowling ball spawn position here
             sphere.position = this.mesh.position.add(
-              new Vector3(-1.2, 0.4, -1.0)
+              new Vector3(-1.1, 1, 0.03)
             );
             sphere.material = new StandardMaterial(
               "bowlingball material",
@@ -296,11 +326,32 @@ export class Spawner {
               }
             );
 
-            this.liveBowlingballs.push(sphere);
+            const bowlingball = new Bowlingball(sphere, this.scene);
+
+            this.liveBowlingballs.push(bowlingball);
 
             console.log(
               "number of bowlingballs: " + this.liveBowlingballs.length
             );
+          } else if (ballType == BALLTYPE.BOWLINGPIN) {
+            this.environment.liveBowlingPins.forEach(function (pin) {
+              pin.onFallObservable.clear();
+              pin.onFallObservable = null;
+              pin.mesh.dispose();
+            });
+            this.environment.liveBowlingPins.splice(0);
+
+            var liveBowlingballs = this.scene.getMeshesByTags("bowlingball");
+            liveBowlingballs.forEach(function (ball) {
+              ball.dispose();
+            });
+
+            this.environment.placeBowlingPins(
+              this.environment.bowlingScoreTextplane,
+              this.scene
+            );
+
+            this.environment.bowlingScoreTextplane.text = "0";
           }
         }
       )

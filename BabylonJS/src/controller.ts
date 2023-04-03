@@ -114,7 +114,7 @@ export class Controller {
                   console.log("mesh under controller pointer: " + mesh.name); // print to check the mesh we are pointing to
                   if (mesh.name !== "ground") { //exclude ground because we don't want to move the ground around
                     
-                    if (mesh.name === "basketball") {
+                    if (mesh.name === "basketball" || mesh.name === "bowlingball") {
                       if (mesh.physicsImpostor) {
                         mesh.physicsImpostor.mass = 0;
                       }
@@ -150,10 +150,17 @@ export class Controller {
                   //   }
                   // );
 
-                  ball.physicsImpostor.mass = 1;
+                  var velocityAmp = 0;
+                  if (ball.name === "basketball") {
+                    ball.physicsImpostor.mass = 1;
+                    velocityAmp = 3.5;
+                  } else if (ball.name === "bowlingball") {
+                    ball.physicsImpostor.mass = 5;
+                    velocityAmp = 2;
+                  }
 
                   const w = angularVelocity;
-                  const v = linearVelocity.scale(5);
+                  const v = linearVelocity.scale(velocityAmp);
 
                   const r = new Vector3(0, 0, 0);
                   r.rotateByQuaternionToRef(

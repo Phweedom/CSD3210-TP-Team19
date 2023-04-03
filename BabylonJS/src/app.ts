@@ -23,6 +23,8 @@ export class App {
 
   // Sound can be used to define a sound (song, bgm, sfx, etc) that can be played in the application.
   sound: Sound;
+
+  initialized: Boolean;
   
   /**
    * Constructor.
@@ -35,7 +37,7 @@ export class App {
   constructor(engine: Engine, canvas: HTMLCanvasElement) {
     this.engine = engine;
     this.canvas = canvas;
-    // this.world = world;
+    this.initialized = false;
     console.log("app is running");
   }
 
@@ -61,24 +63,25 @@ export class App {
     // building the environment //////////////////////////////////////////////////////////////////
     // create cameras and lights (either use default or create your own)
     scene.createDefaultCameraOrLight(false, true, true);
-    scene.activeCamera.position = new Vector3(0, 1, 0);
+    scene.activeCamera.position.set(0, 3, 0);
+    //scene.activeCamera.position = new Vector3(8, 2, -2);
     //Util.createCamera(scene, this.canvas);
     //Util.createLights(scene);
 
 
     // create ground
-    const ground = Util.createGround(50, 50, 0.5, new Vector3(0, 0.4, 0), scene);
+    const ground = Util.createGround(100, 100, 0.5, new Vector3(0, 0.39, 0), scene);
 
     // build the game environment
     //Environment.buildGameEnvironment(scene);
     const environment = new Environment(scene);
 
-    // temporary ball
+    // temporary scoring basketball
     var sphere = MeshBuilder.CreateSphere("basketball", {
       segments: 16,
       diameter: 0.3,
     });
-    sphere.position = new Vector3(0, 8, 5.8);
+    sphere.position = new Vector3(0, 3, 5.8);
     sphere.material = new StandardMaterial("basketball material", scene);
     const texture = new Texture("assets/textures/basketball.png", scene);
     const basketballMaterial = sphere.material as StandardMaterial;
@@ -98,6 +101,31 @@ export class App {
                 restitution: 0.8,
       }
     );
+
+    const music = new Sound('music', 'assets/sounds/basketball_ambience.wav', scene, null, { loop: true, autoplay: true });
+
+    // // temporary scoring bowlingball
+    // var bowlingball = MeshBuilder.CreateSphere("bowlingball", {
+    //   segments: 16,
+    //   diameter: 0.3,
+    // });
+    // bowlingball.position = new Vector3(7.8, 8, 7);
+    // bowlingball.material = new StandardMaterial("bowlingball material", scene);
+    // const btexture = new Texture("assets/textures/bowling.jpg", scene);
+    // const bowlingMaterial = bowlingball.material as StandardMaterial;
+    // bowlingMaterial.diffuseTexture = btexture;
+    // bowlingball.material = bowlingMaterial;  
+    // Tags.AddTagsTo(bowlingball, "bowlingball")
+
+    // bowlingball.physicsImpostor = new PhysicsImpostor(
+    //   bowlingball,
+    //   PhysicsImpostor.SphereImpostor,
+    //   {
+    //     mass: 5.0,
+    //             friction: 1.0,
+    //             restitution: 0.1,
+    //   }
+    // );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -139,11 +167,13 @@ export class App {
 
     // snap xr camera to desired height (so that camera doesn't go down to ground level after teleportation)
     xr.baseExperience.sessionManager.onXRFrameObservable.add(() => {
-      //xr.baseExperience.camera.position.y = 20;
-      //xr.baseExperience.camera.position.y = 1;
+      //xr.baseExperience.camera.position.y = 2;
+      if (this.initialized === false) {
+        xr.baseExperience.camera.position.set(0, 2.5, 0);
+        this.initialized = true;
+      }
     });
-
-    xr.baseExperience.camera.position.y = 2;
+    //xr.baseExperience.camera.position.set(0, 5, 0);
 
 
 
