@@ -153,7 +153,7 @@ export class Controller {
                   var velocityAmp = 0;
                   if (ball.name === "basketball") {
                     ball.physicsImpostor.mass = 1;
-                    velocityAmp = 4;
+                    velocityAmp = 3;
                   } else if (ball.name === "bowlingball") {
                     ball.physicsImpostor.mass = 5;
                     velocityAmp = 2;
