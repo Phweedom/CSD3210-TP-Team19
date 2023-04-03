@@ -70,7 +70,7 @@ export class App {
 
 
     // create ground
-    const ground = Util.createGround(50, 50, 0.5, new Vector3(0, 0.39, 0), scene);
+    const ground = Util.createGround(100, 100, 0.5, new Vector3(0, 0.39, 0), scene);
 
     // build the game environment
     //Environment.buildGameEnvironment(scene);
@@ -98,7 +98,7 @@ export class App {
       {
         mass: 2.0,
                 friction: 0,
-                restitution: 1,
+                restitution: 0.8,
       }
     );
 

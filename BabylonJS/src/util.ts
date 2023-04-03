@@ -19,6 +19,7 @@ import {
   SceneLoader,
   Sound,
   StandardMaterial,
+  Tags,
   Texture,
   UniversalCamera,
   Vector3,
@@ -336,9 +337,11 @@ export class Util {
       PhysicsImpostor.BoxImpostor, {
         mass: 0,
         friction: 1,
-        restitution: 1
+        restitution: 0.5
       }
     )
+
+    Tags.AddTagsTo(ground, "ground");
 
     return ground;
   }
