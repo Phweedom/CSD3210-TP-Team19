@@ -258,16 +258,28 @@ export class MyObservables {
   static addBounceObservable(basketball: Basketball) {
     const onBounceObservable = new Observable<Boolean>();
 
-    basketball.scene.registerBeforeRender(function () {
+    basketball.scene.registerBeforeRender(function () {      
+      
+      // update time spent below threshold height
+      if (basketball.mesh.position.y < basketball.thresholdHeight) {
+        basketball.timeSpentBelowThreshold += 1 / 60;
+      } else {
+        basketball.timeSpentBelowThreshold = 0.0;
+      }
+      
       if (basketball.timeAfterLastBounce < basketball.bounceCooldown) {
         basketball.timeAfterLastBounce += 1 / 60;
       } else {
         const groundMesh = basketball.scene.getMeshesByTags("ground")[0];
-
         const distance = basketball.mesh.position.y - groundMesh.position.y;
 
-        if (distance < 0.5 && !basketball.mesh.parent) {
+
+
+        // only play the sound if ball is in contact with the ground, is not parented to controller, 
+        // and is bouncing high enough
+        if (distance < 0.5 && !basketball.mesh.parent && basketball.timeSpentBelowThreshold < 0.2) {
           basketball.timeAfterLastBounce = 0.0;
+          console.log("bounce");
           basketball.bounceSound.play();
         }
       }

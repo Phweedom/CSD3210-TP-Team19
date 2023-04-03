@@ -10,6 +10,9 @@ export class Basketball {
   timeAfterLastBounce: number;
   bounceCooldown: number;
 
+  timeSpentBelowThreshold: number;
+  thresholdHeight: number;
+
   // constructor(position: Vector3, world: CANNON.World, scene: Scene) {
   //     this.mesh = MeshBuilder.CreateSphere("basketball", { diameter: 3}, scene);
   //     this.mesh.material = new StandardMaterial("basketball material", scene);
@@ -40,8 +43,9 @@ export class Basketball {
     this.timeAfterLastBounce = 0.1;
     this.bounceCooldown = 0.1;
 
+    this.timeSpentBelowThreshold = 0.0;
+    this.thresholdHeight = 1.0;
+
     MyObservables.addBounceObservable(this);
-
-
   }
 }
