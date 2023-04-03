@@ -101,7 +101,9 @@ This is for distributing the project to others.
 <div id='video_link'></div>
 
 ## Video link
-`<insert video link here>`
+https://youtu.be/iKpIKlv7H1M
+
+[Side Note: The in-game audio has been disable so that the voiceover can be heard.]
 
 <hr>
 
