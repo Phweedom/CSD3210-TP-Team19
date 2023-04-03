@@ -79,7 +79,7 @@ export class Environment {
     this.addWalls(scene);
 
     // add a basketball spawner
-    const basketballSpawner = new Spawner(BALLTYPE.BASKETBALL, new Vector3(-1.5, 2.5, 1), this, scene);
+    const basketballSpawner = new Spawner(BALLTYPE.BASKETBALL, new Vector3(-1.5, 3, 1), this, scene);
   }
 
   addWalls(scene: Scene) {

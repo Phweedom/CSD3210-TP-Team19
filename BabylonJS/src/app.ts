@@ -23,6 +23,8 @@ export class App {
 
   // Sound can be used to define a sound (song, bgm, sfx, etc) that can be played in the application.
   sound: Sound;
+
+  initialized: Boolean;
   
   /**
    * Constructor.
@@ -35,7 +37,7 @@ export class App {
   constructor(engine: Engine, canvas: HTMLCanvasElement) {
     this.engine = engine;
     this.canvas = canvas;
-    // this.world = world;
+    this.initialized = false;
     console.log("app is running");
   }
 
@@ -61,7 +63,7 @@ export class App {
     // building the environment //////////////////////////////////////////////////////////////////
     // create cameras and lights (either use default or create your own)
     scene.createDefaultCameraOrLight(false, true, true);
-    scene.activeCamera.position = new Vector3(0, 5, 0);
+    scene.activeCamera.position.set(0, 5, 0);
     //scene.activeCamera.position = new Vector3(8, 2, -2);
     //Util.createCamera(scene, this.canvas);
     //Util.createLights(scene);
@@ -166,8 +168,12 @@ export class App {
     // snap xr camera to desired height (so that camera doesn't go down to ground level after teleportation)
     xr.baseExperience.sessionManager.onXRFrameObservable.add(() => {
       //xr.baseExperience.camera.position.y = 2;
+      if (this.initialized === false) {
+        xr.baseExperience.camera.position.set(0, 2, 0);
+        this.initialized = true;
+      }
     });
-    xr.baseExperience.camera.position.y = 20;
+    //xr.baseExperience.camera.position.set(0, 5, 0);
 
 
 
