@@ -79,7 +79,7 @@ export class Environment {
     this.addBasketballEnvironmentColliders(scene);
 
     // add a basketball spawner
-    const basketballSpawner = new Spawner(BALLTYPE.BASKETBALL, new Vector3(-1.5, 3, 1), this, scene);
+    const basketballSpawner = new Spawner(BALLTYPE.BASKETBALL, new Vector3(-1.2, 3, 1), this, scene);
   }
 
   addBasketballEnvironmentColliders(scene: Scene) {
@@ -163,6 +163,20 @@ export class Environment {
       30,
       scene
     );
+
+    const scoreboardCollider = MeshBuilder.CreateBox("scoreboardCollider", {
+      size: 0.2,
+      width: 1.45,
+      height: 0.72
+    });
+    scoreboardCollider.position = position.add(new Vector3(0, 0, 0.1));
+
+    scoreboardCollider.physicsImpostor = new PhysicsImpostor(scoreboard.mesh, PhysicsImpostor.BoxImpostor, {
+      mass: 0, friction: 1, restitution: 0.5
+    })
+
+    scoreboardCollider.material = new StandardMaterial("scoreboardCollider", scene);
+    scoreboardCollider.material.alpha = 0.0;
 
     return scoreboard;
   }
