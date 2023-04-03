@@ -76,31 +76,31 @@ export class App {
     //Environment.buildGameEnvironment(scene);
     const environment = new Environment(scene);
 
-    // temporary scoring basketball
-    var sphere = MeshBuilder.CreateSphere("basketball", {
-      segments: 16,
-      diameter: 0.3,
-    });
-    sphere.position = new Vector3(0, 3, 5.8);
-    sphere.material = new StandardMaterial("basketball material", scene);
-    const texture = new Texture("assets/textures/basketball.png", scene);
-    const basketballMaterial = sphere.material as StandardMaterial;
-    basketballMaterial.diffuseTexture = texture;
-    sphere.material = basketballMaterial;  
+    // // temporary scoring basketball
+    // var sphere = MeshBuilder.CreateSphere("basketball", {
+    //   segments: 16,
+    //   diameter: 0.3,
+    // });
+    // sphere.position = new Vector3(0, 3, 5.8);
+    // sphere.material = new StandardMaterial("basketball material", scene);
+    // const texture = new Texture("assets/textures/basketball.png", scene);
+    // const basketballMaterial = sphere.material as StandardMaterial;
+    // basketballMaterial.diffuseTexture = texture;
+    // sphere.material = basketballMaterial;  
 
-    sphere.metadata = {};
-    sphere.metadata.value = false;
-    Tags.AddTagsTo(sphere, "basketball")
+    // sphere.metadata = {};
+    // sphere.metadata.value = false;
+    // Tags.AddTagsTo(sphere, "basketball")
 
-    sphere.physicsImpostor = new PhysicsImpostor(
-      sphere,
-      PhysicsImpostor.SphereImpostor,
-      {
-        mass: 2.0,
-                friction: 0,
-                restitution: 0.8,
-      }
-    );
+    // sphere.physicsImpostor = new PhysicsImpostor(
+    //   sphere,
+    //   PhysicsImpostor.SphereImpostor,
+    //   {
+    //     mass: 2.0,
+    //             friction: 0,
+    //             restitution: 0.8,
+    //   }
+    // );
 
     const music = new Sound('music', 'assets/sounds/basketball_ambience.wav', scene, null, { loop: true, autoplay: true });
 
