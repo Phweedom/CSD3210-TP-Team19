@@ -297,6 +297,24 @@ static addBounceObservable(basketball: Basketball){
     scene: Scene
   ) {
     const onFallObservable = new Observable<boolean>();
+    const pinSound = new Sound('pinHitSound', 'assets/sounds/PinHit.wav', scene, null, {loop: false, autoplay: false, spatialSound: true});
+
+    //Particles
+    const particleSystem = new ParticleSystem("particleSystemPin", 500, scene);
+    particleSystem.particleTexture = new Texture("assets/textures/Flare.png");
+    particleSystem.minEmitBox = new Vector3(0, 0, 0)
+    particleSystem.maxEmitBox = new Vector3(0, 0, 0)
+    particleSystem.worldOffset = bowlingPin.mesh.position;
+    particleSystem.emitRate = 300;
+    particleSystem.targetStopDuration = 0.05;
+    particleSystem.disposeOnStop = true;
+    particleSystem.gravity = new Vector3(0, -9.81, 0);
+    particleSystem.direction1 = new Vector3(1, 1, 1);
+    particleSystem.direction2 = new Vector3(-1, 1, -1);
+    particleSystem.minEmitPower = 2;
+    particleSystem.maxEmitPower = 3;
+    particleSystem.minSize = 0.1;
+    particleSystem.maxSize = 0.1;
 
     // register a function to run before each frame of the scene is rendered. This function
     // checks whether sphere is intersecting with helloSphere, and notifies onIntersectObservable
@@ -351,6 +369,14 @@ static addBounceObservable(basketball: Basketball){
         }
         bowlingPin.dirty = true;
         //onFallObservable.notifyObservers(bowlingPin.mesh.metadata.value);
+
+        //PLAY SOUND
+        pinSound.setPosition(bowlingPin.mesh.position);
+        pinSound.setPlaybackRate(0.8 + 0.4 * Math.random())
+        pinSound.play();
+
+        //Play particle
+        particleSystem.start();
       }
 
 
