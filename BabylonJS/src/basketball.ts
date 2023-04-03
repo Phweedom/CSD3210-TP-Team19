@@ -1,13 +1,14 @@
-import { Mesh, MeshBuilder, Observable, PhysicsImpostor, Scene, StandardMaterial, Tags, Texture, Vector3 } from "babylonjs";
+import { Mesh, MeshBuilder, Observable, PhysicsImpostor, Scene, Sound, StandardMaterial, Tags, Texture, Vector3 } from "babylonjs";
 import * as CANNON from "cannon-es";
 import { MyObservables } from "./myObservables";
 
 export class Basketball {
   scene: Scene;
   mesh: Mesh;
-  rididbody: CANNON.Body;
-  previousPosition: Vector3;
-  onPositionhangeObservable: Observable<[Vector3]>;
+  onBounceObservable: Observable<Boolean>;
+  bounceSound: Sound;
+  timeAfterLastBounce: number;
+  bounceCooldown: number;
 
   // constructor(position: Vector3, world: CANNON.World, scene: Scene) {
   //     this.mesh = MeshBuilder.CreateSphere("basketball", { diameter: 3}, scene);
@@ -31,33 +32,15 @@ export class Basketball {
   //     MyObservables.addOnPositionChangeObservable(this, scene);
   // }
 
-  constructor(position: Vector3, scene: Scene) {
-    const sphere = MeshBuilder.CreateSphere(
-      "basketball",
-      { diameter: 0.3 },
-      scene
-    );
-    sphere.position = position;
-    //sphere.scaling.setAll(0.3);
-    sphere.physicsImpostor = new PhysicsImpostor(
-      sphere,
-      PhysicsImpostor.SphereImpostor,
-      {
-        mass: 1,
-        friction: 1,
-        restitution: 1,
-        //disableBidirectionalTransformation: true
-      }
-    );
+  constructor(mesh: Mesh, scene: Scene) {
 
-    sphere.material = new StandardMaterial("basketball material", scene);
-    const texture = new Texture("assets/textures/basketball.png", this.scene);
-    const basketballMaterial = sphere.material as StandardMaterial;
-    basketballMaterial.diffuseTexture = texture;
-    sphere.material = basketballMaterial;        
+    this.scene = scene;
+    this.mesh = mesh;
+    this.bounceSound = new Sound('bounceSound', 'assets/sounds/Bounce.wav', scene, null); 
+    this.timeAfterLastBounce = this.bounceCooldown = 0.1;
 
-    sphere.metadata = {};
-    sphere.metadata.value = false;
-    Tags.AddTagsTo(sphere, "basketball");
+    MyObservables.addBounceObservable(this);
+
+
   }
 }

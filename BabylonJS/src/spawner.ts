@@ -13,6 +13,7 @@ import {
   Vector3,
 } from "babylonjs";
 import { Environment } from "./environment";
+import { Basketball } from "./basketball";
 
 export enum BALLTYPE {
   BASKETBALL,
@@ -31,7 +32,7 @@ export class Spawner {
   ballType: BALLTYPE;
   mesh: Mesh;
   name: string;
-  liveBasketballs: Array<Mesh>;
+  liveBasketballs: Array<Basketball>;
   liveBowlingballs: Array<Mesh>;
   containerMesh: Mesh;
   environment: Environment;
@@ -51,7 +52,7 @@ export class Spawner {
   ) {
     this.scene = scene;
     this.environment = environment;
-    this.liveBasketballs = new Array<Mesh>;
+    this.liveBasketballs = new Array<Basketball>;
     this.liveBowlingballs = new Array<Mesh>;
 
     // assigning the name based on input element
@@ -100,7 +101,7 @@ export class Spawner {
         const maxBalls = 9;
         if (this.liveBasketballs.length - maxBalls > i) {
           // out of bounds
-          ball.dispose();
+          ball.mesh.dispose();
           return false;
         }
         return true;
@@ -282,7 +283,9 @@ export class Spawner {
               }
             );
 
-            this.liveBasketballs.push(sphere);
+            const basketball = new Basketball(sphere, this.scene);
+
+            this.liveBasketballs.push(basketball);
 
             console.log(
               "number of basketballs: " + this.liveBasketballs.length
