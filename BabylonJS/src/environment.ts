@@ -48,7 +48,57 @@ export class Environment {
   }
 
   buildSurroundingEnvironment(position: Vector3, scale: number, scene: Scene) {
+    //Tree generator
+    for (let i = 0; i < 50; ++i)
+    {
+      var x = 0;
+      var y = 0;
+      while ((x < 10 && x > -10) && (y < 10 && y > -10))
+      {
+        x = -40 + 80 * Math.random();
+        y = -40 + 80 * Math.random();
+      }
+      Util.loadModel(
+        "assets/models/",
+        "tree_low-poly.glb",
+        new Vector3(x, 0, y),
+        0.004 + 0.002 * Math.random(),
+        scene
+      );
+    }
 
+    //Line the edges with rocks
+    for (let i = 0; i < 10; ++i)
+    {
+      Util.loadModel(
+        "assets/models/",
+        "low_poly_rock_1.glb",
+        new Vector3(-40, 0, -40 + 8 * i),
+        9 + 2 * Math.random(),
+        scene
+      );
+      Util.loadModel(
+        "assets/models/",
+        "low_poly_rock_1.glb",
+        new Vector3(40, 0, -40 + 8 * i),
+        9 + 2 * Math.random(),
+        scene
+      );
+      Util.loadModel(
+        "assets/models/",
+        "low_poly_rock_1.glb",
+        new Vector3(-40 + 8 * i, 0, -40),
+        9 + 2 * Math.random(),
+        scene
+      );
+      Util.loadModel(
+        "assets/models/",
+        "low_poly_rock_1.glb",
+        new Vector3(-40 + 8 * i, 0, 40),
+        9 + 2 * Math.random(),
+        scene
+      );
+    }
   }
 
 
