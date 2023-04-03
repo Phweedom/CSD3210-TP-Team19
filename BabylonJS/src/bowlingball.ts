@@ -7,12 +7,18 @@ export class Bowlingball {
   mesh: Mesh;
   onRollingObservable: Observable<Boolean>;
   rollingSound: Sound;
+  inContactWithTrack: Boolean;
+  moving: Boolean;
+  soundPlaying: Boolean;
 
   constructor(mesh: Mesh, scene: Scene) {
 
     this.scene = scene;
     this.mesh = mesh;
     this.rollingSound = new Sound('rollingSound', 'assets/sounds/bowlingRoll.wav', scene, null); 
+    this.inContactWithTrack = false;
+    this.moving = false;
+    this.soundPlaying = false;
 
     MyObservables.addRollingObservable(this);
   }

@@ -338,9 +338,9 @@ export class Environment {
     this.addBowlingEnvironmentColliders(scene);
 
     const bowlingTrack = MeshBuilder.CreateBox("bowlingTrack",{size: 8, width: 1.75, height: 0.25}, scene);
-    bowlingTrack.position.set(7.8, 0.8, 4.8);
+    bowlingTrack.position.set(7.8, 0.53, 4.8);
     bowlingTrack.material = new StandardMaterial("bowlingTrackMaterial", scene);
-    bowlingTrack.material.alpha = 0;
+    bowlingTrack.material.alpha = 1.0;
     Tags.AddTagsTo(bowlingTrack, "bowlingTrack");
   }
 

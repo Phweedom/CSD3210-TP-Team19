@@ -282,11 +282,19 @@ export class MyObservables {
     bowlingball.scene.registerBeforeRender(function () {
       // if smth smth then play sound
       const bowlingTrack = bowlingball.scene.getMeshesByTags("bowlingTrack")[0];
-      const distance = bowlingball.mesh.position.y - bowlingTrack.position.y;
-      const onRoll = bowlingTrack.position._isDirty;
 
-      if(distance < 0.5 && !bowlingball.mesh.parent && onRoll){
+      const distance = bowlingball.mesh.position.y - bowlingTrack.position.y;
+      if (distance < 0.3)
+      bowlingball.inContactWithTrack = true;
+
+      bowlingball.moving = bowlingball.mesh.position._isDirty;
+
+      if(bowlingball.inContactWithTrack && (!bowlingball.mesh.parent) && bowlingball.moving && !bowlingball.soundPlaying){
         bowlingball.rollingSound.play();
+        bowlingball.soundPlaying = true;
+      } else {
+        bowlingball.rollingSound.pause();
+        bowlingball.soundPlaying = false;
       }
 
     });

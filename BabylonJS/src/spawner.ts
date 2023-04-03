@@ -298,7 +298,7 @@ export class Spawner {
             });
             // bowling ball spawn position here
             sphere.position = this.mesh.position.add(
-              new Vector3(-1.1, 1, 0.03)
+              new Vector3(-1.1, 1, 5)
             );
             sphere.material = new StandardMaterial(
               "bowlingball material",
