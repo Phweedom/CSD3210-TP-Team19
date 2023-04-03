@@ -37,7 +37,8 @@ export class Basketball {
     this.scene = scene;
     this.mesh = mesh;
     this.bounceSound = new Sound('bounceSound', 'assets/sounds/Bounce.wav', scene, null); 
-    this.timeAfterLastBounce = this.bounceCooldown = 0.1;
+    this.timeAfterLastBounce = 0.1;
+    this.bounceCooldown = 0.1;
 
     MyObservables.addBounceObservable(this);
 

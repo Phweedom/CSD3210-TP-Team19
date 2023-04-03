@@ -254,7 +254,8 @@ static addBounceObservable(basketball: Basketball){
     //console.log("dt: " + basketball.scene.deltaTime);
 
     if (basketball.timeAfterLastBounce < basketball.bounceCooldown) {
-      basketball.timeAfterLastBounce += (basketball.scene.deltaTime/ 1000);
+      basketball.timeAfterLastBounce += (1/60);
+      console.log(basketball.timeAfterLastBounce);
       
       //console.log("on cooldown");
     } else {
