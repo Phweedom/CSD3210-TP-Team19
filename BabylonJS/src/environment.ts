@@ -79,7 +79,7 @@ export class Environment {
     this.addBasketballEnvironmentColliders(scene);
 
     // add a basketball spawner
-    const basketballSpawner = new Spawner(BALLTYPE.BASKETBALL, new Vector3(-1.2, 3, 1), this, scene);
+    const basketballSpawner = new Spawner(BALLTYPE.BASKETBALL, new Vector3(-1.2, 3, 0.8), this, scene);
   }
 
   addBasketballEnvironmentColliders(scene: Scene) {

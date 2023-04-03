@@ -169,7 +169,7 @@ export class App {
     xr.baseExperience.sessionManager.onXRFrameObservable.add(() => {
       //xr.baseExperience.camera.position.y = 2;
       if (this.initialized === false) {
-        xr.baseExperience.camera.position.set(0, 3, 0);
+        xr.baseExperience.camera.position.set(0, 2.5, 0);
         this.initialized = true;
       }
     });
