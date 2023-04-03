@@ -246,7 +246,48 @@ export class MyObservables {
   }
 
 
+static addBounceObservable(basketball: Basketball){
+  const onBounceObservable = new Observable<Boolean>();
+  
+  basketball.scene.registerBeforeRender(function () {
 
+    //console.log("dt: " + basketball.scene.deltaTime);
+
+    if (basketball.timeAfterLastBounce < basketball.bounceCooldown) {
+      basketball.timeAfterLastBounce += (basketball.scene.deltaTime/ 1000);
+      
+      //console.log("on cooldown");
+    } else {
+      //console.log("finish cooldown");
+      const groundMesh = basketball.scene.getMeshesByTags("ground")[0];
+      
+      const distance = basketball.mesh.position.y - groundMesh.position.y;
+      //console.log(distance);
+      
+      if (distance < 0.5) {
+        basketball.timeAfterLastBounce = 0.0;
+        console.log("bounce");
+        basketball.bounceSound.play();
+      }
+
+    }
+
+
+    
+    
+    
+
+
+
+
+
+    });
+
+
+// assign onIntersectObservable as the onIntersectObservable property of helloSphere.
+  // whenever onIntersectObservable emits an event, helloSphere will receive it.
+  basketball.onBounceObservable = onBounceObservable;
+}
 
 
 
@@ -350,36 +391,36 @@ export class MyObservables {
 
 
 
-  static addOnPositionChangeObservable(ball: Basketball, scene: Scene) {
-    const onPositionhangeObservable = new Observable<[Vector3]>();
+  // static addOnPositionChangeObservable(ball: Basketball, scene: Scene) {
+  //   const onPositionhangeObservable = new Observable<[Vector3]>();
 
-    // before each frame is rendered, check the position of all basketballs
-    scene.onBeforeRenderObservable.add(() => {
-      var balls: Mesh[];
-      balls = scene.getMeshesByTags("basketball");
+  //   // before each frame is rendered, check the position of all basketballs
+  //   scene.onBeforeRenderObservable.add(() => {
+  //     var balls: Mesh[];
+  //     balls = scene.getMeshesByTags("basketball");
 
-      // for each basketball, check if current rigidbody position is same as previous
-      balls.forEach(function (ball) {
-        const previousRBPosition = ball.metadata.object.previousPosition;
-        const currentRBPosition = ball.metadata.object.rididbody.position;
+  //     // for each basketball, check if current rigidbody position is same as previous
+  //     balls.forEach(function (ball) {
+  //       const previousRBPosition = ball.metadata.object.previousPosition;
+  //       const currentRBPosition = ball.metadata.object.rididbody.position;
 
-        if (previousRBPosition != currentRBPosition) {
-          console.log(currentRBPosition);
+  //       if (previousRBPosition != currentRBPosition) {
+  //         console.log(currentRBPosition);
 
-          //notify observers
-          onPositionhangeObservable.notifyObservers([currentRBPosition]);
-        }
-      });
-    });
+  //         //notify observers
+  //         onPositionhangeObservable.notifyObservers([currentRBPosition]);
+  //       }
+  //     });
+  //   });
 
-    ball.onPositionhangeObservable = onPositionhangeObservable;
+  //   ball.onPositionhangeObservable = onPositionhangeObservable;
 
-    ball.onPositionhangeObservable.add((newPosition) => {
-      ball.previousPosition = newPosition[0];
+  //   ball.onPositionhangeObservable.add((newPosition) => {
+  //     ball.previousPosition = newPosition[0];
 
-      ball.mesh.position.x = newPosition[0].x;
-      ball.mesh.position.y = newPosition[0].y;
-      ball.mesh.position.z = newPosition[0].z;
-    });
-  }
+  //     ball.mesh.position.x = newPosition[0].x;
+  //     ball.mesh.position.y = newPosition[0].y;
+  //     ball.mesh.position.z = newPosition[0].z;
+  //   });
+  // }
 }
