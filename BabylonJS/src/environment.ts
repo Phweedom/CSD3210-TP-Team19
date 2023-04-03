@@ -14,6 +14,7 @@ import {
 import { Atom, Element, TextPlane } from "./components/meshes";
 import { Util } from "./util";
 import { BALLTYPE, Spawner } from "./spawner";
+import { TIMERTYPE, Timer} from "./timer";
 import { ScoreDetector } from "./scoreDetector";
 import { TextBlock } from "babylonjs-gui";
 import { BowlingPin } from "./bowlingPin";
@@ -80,6 +81,9 @@ export class Environment {
 
     // add a basketball spawner
     const basketballSpawner = new Spawner(BALLTYPE.BASKETBALL, new Vector3(-1.2, 3, 0.8), this, scene);
+
+    // add a basketball countdown timer
+    const basketballTimer = new Timer(TIMERTYPE.BASKETBALL, new Vector3(1.2, 3, 0.8), new Vector3(0, 3.6, 6), 60, this, scene);
   }
 
   addBasketballEnvironmentColliders(scene: Scene) {
@@ -278,7 +282,11 @@ export class Environment {
 
     this.placeBowlingPins(this.bowlingScoreTextplane, scene);
 
+    // add bowling ball spawner
     const bowlingballSpawner = new Spawner(BALLTYPE.BOWLINGBALL, new Vector3(9.408, 1.5, -1.525), this, scene);
+
+    // add bowling countdown timer
+    const bowlingTimer = new Timer(TIMERTYPE.BOWLING, new Vector3(9.408, 2.5, -1.525), new Vector3(9.408, 1.5, 8), 60, this, scene);
 
     // add reset switch
     const bowlingPinSpawner = new Spawner(BALLTYPE.BOWLINGPIN, new Vector3(9.215, 3.0, 8.149), this, scene);
