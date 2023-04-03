@@ -85,12 +85,12 @@ export class Spawner {
     spawnerMaterial.diffuseColor = Color3.Green();
     this.mesh.position = position;
 
-    // // create a container that catches the balls
-    // this.createContainer(
-    //   ballType,
-    //   position.add(new Vector3(0.5, -1, 0)),
-    //   this.scene
-    // );
+    // create a container that catches the balls
+    this.createContainer(
+      ballType,
+      position.add(new Vector3(0.5, -1, 0)),
+      this.scene
+    );
 
     // spawning logic
     this.initActions(ballType);

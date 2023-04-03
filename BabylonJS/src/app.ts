@@ -98,7 +98,7 @@ export class App {
       {
         mass: 2.0,
                 friction: 0,
-                restitution: 1,
+                restitution: 0.8,
       }
     );
 
