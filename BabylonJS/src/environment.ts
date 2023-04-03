@@ -341,6 +341,7 @@ export class Environment {
     bowlingTrack.position.set(7.8, 0.8, 4.8);
     bowlingTrack.material = new StandardMaterial("bowlingTrackMaterial", scene);
     bowlingTrack.material.alpha = 0;
+    Tags.AddTagsTo(bowlingTrack, "bowlingTrack");
   }
 
   addBowlingEnvironmentColliders(scene: Scene) {

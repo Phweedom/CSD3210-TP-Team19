@@ -281,7 +281,16 @@ export class MyObservables {
 
     bowlingball.scene.registerBeforeRender(function () {
       // if smth smth then play sound
-    })
+      const bowlingTrack = bowlingball.scene.getMeshesByTags("bowlingTrack")[0];
+      const distance = bowlingball.mesh.position.y - bowlingTrack.position.y;
+      const onRoll = bowlingTrack.position._isDirty;
+
+      if(distance < 0.5 && !bowlingball.mesh.parent && onRoll){
+        bowlingball.rollingSound.play();
+      }
+
+    });
+    bowlingball.onRollingObservable = onRollingObservable;
   }
 
   static addBowlingScoreObservable(
