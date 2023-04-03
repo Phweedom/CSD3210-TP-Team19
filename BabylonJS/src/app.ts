@@ -167,7 +167,7 @@ export class App {
     xr.baseExperience.sessionManager.onXRFrameObservable.add(() => {
       //xr.baseExperience.camera.position.y = 2;
     });
-    xr.baseExperience.camera.position.y = 2;
+    xr.baseExperience.camera.position.y = 20;
 
 
 
