@@ -2,9 +2,12 @@ import {
   Color3,
   Mesh,
   Observable,
+  ParticleSystem,
+  PointParticleEmitter,
   Scene,
   Sound,
   StandardMaterial,
+  Texture,
   Vector3,
 } from "babylonjs";
 import { Atom, Compound, Element } from "./components/meshes";
@@ -181,7 +184,25 @@ export class MyObservables {
             currentScore += 1;
     
     
-            scoreTextblock.text = currentScore.toString(); 
+            scoreTextblock.text = currentScore.toString();
+
+            //Emit particles at location of scoring
+            const particleSystem = new ParticleSystem("particleSystem", 5000, scene);
+            particleSystem.particleTexture = new Texture("assets/textures/Flare.png");
+            particleSystem.minEmitBox = new Vector3(0, 0, 0)
+            particleSystem.maxEmitBox = new Vector3(0, 0, 0)
+            particleSystem.worldOffset = basketball.position;
+            particleSystem.emitRate = 1000;
+            particleSystem.targetStopDuration = 0.05;
+            particleSystem.disposeOnStop = true;
+            particleSystem.gravity = new Vector3(0, -9.81, 0);
+            particleSystem.direction1 = new Vector3(1, 1, 1);
+            particleSystem.direction2 = new Vector3(-1, 1, -1);
+            particleSystem.minEmitPower = 4;
+            particleSystem.maxEmitPower = 6;
+            particleSystem.minSize = 0.1;
+            particleSystem.maxSize = 0.1;
+            particleSystem.start();
     
 
             // onIntersectObservable.notifyObservers([
